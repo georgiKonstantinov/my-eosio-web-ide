@@ -44,6 +44,6 @@ class talk : eosio::contract {
             message.content  = content;
         });
 
-        print("Test output for user: ", user);
+        print("Test output for user for second commit: ", user);
     }
 };
