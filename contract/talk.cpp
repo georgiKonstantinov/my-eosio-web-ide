@@ -43,5 +43,7 @@ class talk : eosio::contract {
             message.user     = user;
             message.content  = content;
         });
+
+        print("Test output for user: ", user);
     }
 };
