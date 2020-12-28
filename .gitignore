@@ -1,6 +1,6 @@
-*.abi
+//*.abi
 *.log
-*.wasm
+//*.wasm
 dist
 node_modules
 tester
