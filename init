@@ -1,0 +1,8 @@
+cleos create account eosio slm.users EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.customer EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.consult EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+
+eosio-cpp contract/slm_user_management.cpp
+cleos set code slm.users slm_user_management.wasm
+cleos set abi slm.users slm_user_management.abi

@@ -1,0 +1,2 @@
+cleos push action slm.users post '[1000, 0, slm.customer,  "This is a new post"]' -p slm.customer
+cleos get table slm.users '' message
