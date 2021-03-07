@@ -18,8 +18,10 @@ is3pvendor*/
 
 #include <eosio/eosio.hpp>
 
-// Message table
-struct [[eosio::table("slm_users"), eosio::contract("slm_user_management")]] slm_users {
+
+using namespace eosio;
+
+ struct [[eosio::table("slmusers"), eosio::contract("slm_user_management")]]  slm_users_record {
     uint64_t    id       = {}; // Non-0
     eosio::name company     = {};
     bool isprovider = false;
@@ -31,6 +33,8 @@ struct [[eosio::table("slm_users"), eosio::contract("slm_user_management")]] slm
     uint64_t primary_key() const { return id; }
 };
 
+
+typedef eosio::multi_index<name("slmusers"), slm_users_record> slm_users_index; 
 //  using slm_users_table = eosio::multi_index<
 //     "slm_users"_n, slm_users, eosio::indexed_by<"by.isprovider"_n>>;
 
@@ -42,11 +46,8 @@ class slm_user_management : eosio::contract {
     using contract::contract;
 
     // Post a new company
-    [[eosio::action]] void post(uint64_t id, eosio::name company,  bool isprovider,  bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
-        // slm_users_table table{get_self(), get_self()};
-
-        typedef eosio::multi_index<"slm_users"_n, slm_users> slm_users_table;
-        slm_users_table table;
+    [[eosio::action]] void post(uint64_t id, eosio::name company, bool isprovider, bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
+        slm_users_index table(get_self(), get_self().value);
 
         // Check user
         require_auth(company);
@@ -59,7 +60,7 @@ class slm_user_management : eosio::contract {
 
         // Record the message
         table.emplace(get_self(), [&](auto& slm_users) {
-            slm_users.id       = id;
+            slm_users.id    = id;
             slm_users.company    = company;
             slm_users.isprovider = isprovider;
             slm_users.iscustomer  = iscustomer;
