@@ -31,7 +31,7 @@ class PostForm extends React.Component<{}, PostFormState> {
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                user: 'bob',
+                user: 'slm.customer',
                 reply_to: 0,
                 content: 'This is a test'
             },
@@ -49,7 +49,7 @@ class PostForm extends React.Component<{}, PostFormState> {
             const result = await this.api.transact(
                 {
                     actions: [{
-                        account: 'talk',
+                        account: 'slm.users',
                         name: 'post',
                         authorization: [{
                             actor: this.state.data.user,
@@ -58,9 +58,9 @@ class PostForm extends React.Component<{}, PostFormState> {
                         data: this.state.data,
                     }]
                 }, {
-                    blocksBehind: 3,
-                    expireSeconds: 30,
-                });
+                blocksBehind: 3,
+                expireSeconds: 30,
+            });
             console.log(result);
             this.setState({ error: '' });
         } catch (e) {
@@ -132,7 +132,7 @@ class Messages extends React.Component<{}, { content: string }> {
         this.interval = window.setInterval(async () => {
             try {
                 const rows = await rpc.get_table_rows({
-                    json: true, code: 'talk', scope: '', table: 'message', limit: 1000,
+                    json: true, code: 'slm.users', scope: '', table: 'message', limit: 1000,
                 });
                 let content =
                     'id          reply_to      user          content\n' +
@@ -164,11 +164,37 @@ class Messages extends React.Component<{}, { content: string }> {
 }
 
 ReactDOM.render(
+ 
     <div>
-        <PostForm />
+        <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Prototype</h1>
         <br />
+
+
+        <table style={{ "borderWidth": "10px", 'borderColor': "#E67E22", 'borderStyle': 'solid' }}>
+            <caption> <h3>User Mananagement Panel</h3></caption>
+            <tbody>
+                <tr>
+                    <PostForm />
+                    <br />
         Messages:
         <Messages />
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+
+        <table style={{ "borderWidth": "10px", 'borderColor': "#E67E22", 'borderStyle': 'solid' }}>
+            <caption><h3>Usage tracking</h3></caption>
+            <tbody>
+                <tr>
+                    <PostForm />
+                    <br />
+        Messages:
+        <Messages />
+                </tr>
+            </tbody>
+        </table>
     </div>,
     document.getElementById("example")
 );

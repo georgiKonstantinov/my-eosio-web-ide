@@ -19,18 +19,21 @@ is3pvendor*/
 #include <eosio/eosio.hpp>
 
 // Message table
-struct [[eosio::table("message"), eosio::contract("slm_user_management")]] message {
+struct [[eosio::table("slm_users"), eosio::contract("slm_user_management")]] slm_users {
     uint64_t    id       = {}; // Non-0
-    uint64_t    reply_to = {}; // Non-0 if this is a reply
-    eosio::name user     = {};
-    std::string content  = {};
+    eosio::name company     = {};
+    bool isprovider = false;
+    bool iscustomer  = false;
+    bool isconsult = false;
+    bool isauditor = false;
+    bool is3pvendor = false;
 
     uint64_t primary_key() const { return id; }
-    uint64_t get_reply_to() const { return reply_to; }
 };
 
-using message_table = eosio::multi_index<
-    "message"_n, message, eosio::indexed_by<"by.reply.to"_n, eosio::const_mem_fun<message, uint64_t, &message::get_reply_to>>>;
+//  using slm_users_table = eosio::multi_index<
+//     "slm_users"_n, slm_users, eosio::indexed_by<"by.isprovider"_n>>;
+
 
 // The contract
 class slm_user_management : eosio::contract {
@@ -38,31 +41,34 @@ class slm_user_management : eosio::contract {
     // Use contract's constructor
     using contract::contract;
 
-    // Post a message
-    [[eosio::action]] void post(uint64_t id, uint64_t reply_to, eosio::name user, const std::string& content) {
-        message_table table{get_self(), 0};
+    // Post a new company
+    [[eosio::action]] void post(uint64_t id, eosio::name company,  bool isprovider,  bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
+        // slm_users_table table{get_self(), get_self()};
+
+        typedef eosio::multi_index<"slm_users"_n, slm_users> slm_users_table;
+        slm_users_table table;
 
         // Check user
-        require_auth(user);
+        require_auth(company);
 
-        // Check reply_to exists
-        if (reply_to)
-            table.get(reply_to);
-
+   
         // Create an ID if user didn't specify one
-        eosio::check(id < 1'000'000'000ull, "user-specified id is too big");
+        eosio::check(id < 1'000'000'000ull, "user-specified company id is too big");
         if (!id)
             id = std::max(table.available_primary_key(), 1'000'000'000ull);
 
         // Record the message
-        table.emplace(get_self(), [&](auto& message) {
-            message.id       = id;
-            message.reply_to = reply_to;
-            message.user     = user;
-            message.content  = content;
+        table.emplace(get_self(), [&](auto& slm_users) {
+            slm_users.id       = id;
+            slm_users.company    = company;
+            slm_users.isprovider = isprovider;
+            slm_users.iscustomer  = iscustomer;
+            slm_users.isconsult = isconsult;
+            slm_users.isauditor = isauditor;
+            slm_users.is3pvendor = is3pvendor;
         });
 
-        print("Test output for user for second commit: ", user);
+        print("Createdd company: ", company);
     }
 };
 
