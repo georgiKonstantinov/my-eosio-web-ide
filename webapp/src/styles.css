@@ -10,3 +10,8 @@ th, td {
     padding-left: 4px;
     padding-right: 4px;
 }
+
+table.panel { 
+    border: solid 10px;
+    border-Color: #E67E22;
+}

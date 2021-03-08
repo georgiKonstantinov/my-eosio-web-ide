@@ -18,11 +18,11 @@ interface PostDataUserManagement {
 
 interface PostFormStateUserManagement {
     privateKey: string;
-    data: PostData;
+    data: PostDataUserManagement;
     error: string;
 };
 
-class PostFormUserManagement extends React.Component<{}, PostFormState> {
+class PostFormUserManagement extends React.Component<{}, PostFormStateUserManagement> {
     api: Api;
 
     constructor(props: {}) {
@@ -329,7 +329,7 @@ ReactDOM.render(
         <br />
 
 
-        <table style={{ "borderWidth": "10px", 'borderColor': "#E67E22", 'borderStyle': 'solid' }}>
+        <table className="panel">
             <caption> <h3>User Mananagement Panel</h3></caption>
             <tbody>
                 <tr>
@@ -343,7 +343,7 @@ ReactDOM.render(
         <br />
         <br />
 
-        <table style={{ "borderWidth": "10px", 'borderColor': "#E67E22", 'borderStyle': 'solid' }}>
+        <table className="panel">
             <caption><h3>Usage tracking</h3></caption>
             <tbody>
                 <tr>
