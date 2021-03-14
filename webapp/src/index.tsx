@@ -142,10 +142,10 @@ class UsersList extends React.Component<{}, { content: string }> {
                     content +=
                         (row.id + '').padEnd(16) +
                         (row.company).padEnd(22) + '  ' +
-                        (row.isprovider  + '').padEnd(12) +
-                        (row.iscustomer  + '').padEnd(12) +
-                        (row.isconsult  + '').padEnd(12) +
-                        (row.isauditor  + '').padEnd(12) +
+                        (row.isprovider + '').padEnd(12) +
+                        (row.iscustomer + '').padEnd(12) +
+                        (row.isconsult + '').padEnd(12) +
+                        (row.isauditor + '').padEnd(12) +
                         row.is3pvendor + '\n';
                 this.setState({ content });
             } catch (e) {
@@ -325,11 +325,27 @@ class Messages extends React.Component<{}, { content: string }> {
 ReactDOM.render(
 
     <div>
+        <script type="text/javascript">
+            document.getElementById("users").onclick = function() {
+
+           
+
+            }
+
+        </script>
+
+
         <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Prototype</h1>
         <br />
+        <ul>
+            <li><a className="active" href="#users" id="users">Users</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
 
 
-        <table className="panel">
+        <table className="panel" id="usersTable">
             <caption> <h3>User Mananagement Panel</h3></caption>
             <tbody>
                 <tr>
