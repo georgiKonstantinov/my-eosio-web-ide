@@ -20,6 +20,7 @@ interface PostFormStateUserManagement {
     privateKey: string;
     data: PostDataUserManagement;
     error: string;
+    showHideTable: boolean,
 };
 
 class PostFormUserManagement extends React.Component<{}, PostFormStateUserManagement> {
@@ -37,11 +38,23 @@ class PostFormUserManagement extends React.Component<{}, PostFormStateUserManage
                 content: 'This is a test'
             },
             error: '',
+            showHideTable: true,
         };
+        this.hideComponent = this.hideComponent.bind(this);
     }
 
     setData(data: PostData) {
         this.setState({ data: { ...this.state.data, ...data } });
+    }
+
+    hideComponent(name = "") {
+        switch (name) {
+            case "showHideTable":
+                this.setState({ showHideTable: !this.state.showHideTable });
+                break;
+            default:
+                null;
+        }
     }
 
     async post() {
@@ -178,6 +191,7 @@ interface PostFormState {
     privateKey: string;
     data: PostData;
     error: string;
+    showHideTable: boolean,
 };
 
 class PostForm extends React.Component<{}, PostFormState> {
@@ -195,6 +209,7 @@ class PostForm extends React.Component<{}, PostFormState> {
                 content: 'This is a test'
             },
             error: '',
+            showHideTable: false,
         };
     }
 
@@ -230,9 +245,27 @@ class PostForm extends React.Component<{}, PostFormState> {
         }
     }
 
+    hideComponent(name = "") {
+        switch (name) {
+            case "showHideTable":
+                this.setState({ showHideTable: !this.state.showHideTable });
+                break;
+            default:
+                null;
+        }
+    }
+
     render() {
+        const { showHideTable } = this.state;
         return <div>
-            <table>
+               <ul>
+            <li><a className="active" href="#users" id="users" onClick={() => this.hideComponent("showHideTable")}>Users</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+            {showHideTable && (<table>
                 <tbody>
                     <tr>
                         <td>Private Key</td>
@@ -268,7 +301,9 @@ class PostForm extends React.Component<{}, PostFormState> {
                     </tr>
                 </tbody>
             </table>
+            )}
             <br />
+            <button onClick={() => this.hideComponent("showHideTable")}>Hide</button>
             <button onClick={e => this.post()}>Post</button>
             {this.state.error && <div>
                 <br />
@@ -318,6 +353,7 @@ class Messages extends React.Component<{}, { content: string }> {
     }
 
     render() {
+
         return <code><pre>{this.state.content}</pre></code>;
     }
 }
@@ -325,20 +361,10 @@ class Messages extends React.Component<{}, { content: string }> {
 ReactDOM.render(
 
     <div>
-        <script type="text/javascript">
-            document.getElementById("users").onclick = function() {
-
-           
-
-            }
-
-        </script>
-
-
         <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Prototype</h1>
         <br />
         <ul>
-            <li><a className="active" href="#users" id="users">Users</a></li>
+            <li><a className="active" href="#users" id="users" >Users</a></li>
             <li><a href="#news">News</a></li>
             <li><a href="#contact">Contact</a></li>
             <li><a href="#about">About</a></li>
