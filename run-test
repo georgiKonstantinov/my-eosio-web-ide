@@ -1,2 +1,0 @@
-cleos push action slm.users post '[1000, slm.customer,  1, 1, 1, 1, 1]' -p slm.customer
-cleos get table slm.users slm.users slmusers

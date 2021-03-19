@@ -8,16 +8,18 @@ const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 interface PostDataUserManagement {
     id?: number;
-    user?: string;
-    reply_to?: number;
-    content?: string;
+    company?: string;
+    isprovider?: boolean;
+    iscustomer?: boolean;
+    isconsult?: boolean;
+    isauditor?: boolean;
+    is3pvendor?: boolean;
 };
 
 interface PostFormStateUserManagement {
     privateKey: string;
     data: PostDataUserManagement;
     error: string;
-    showHideTable: boolean,
 };
 
 export class PostFormUserManagement extends React.Component<{}, PostFormStateUserManagement> {
@@ -30,28 +32,19 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                user: 'slm.customer',
-                reply_to: 0,
-                content: 'This is a test'
+                company: "",
+                isprovider: false,
+                iscustomer: false,
+                isconsult: false,
+                isauditor: false,
+                is3pvendor: false,
             },
             error: '',
-            showHideTable: true,
         };
-        this.hideComponent = this.hideComponent.bind(this);
     }
 
     setData(data: PostDataUserManagement) {
         this.setState({ data: { ...this.state.data, ...data } });
-    }
-
-    hideComponent(name = "") {
-        switch (name) {
-            case "showHideTable":
-                this.setState({ showHideTable: !this.state.showHideTable });
-                break;
-            default:
-                null;
-        }
     }
 
     async post() {
@@ -63,7 +56,7 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                         account: 'slm.users',
                         name: 'post',
                         authorization: [{
-                            actor: this.state.data.user,
+                            actor: this.state.data.company,
                             permission: 'active',
                         }],
                         data: this.state.data,
@@ -95,27 +88,51 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                         /></td>
                     </tr>
                     <tr>
-                        <td>User</td>
+                        <td>Company</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.user}
-                            onChange={e => this.setData({ user: e.target.value })}
+                            value={this.state.data.company}
+                            onChange={e => this.setData({ company: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Reply To</td>
+                        <td>Provider</td>
                         <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.reply_to}
-                            onChange={e => this.setData({ reply_to: +e.target.value })}
+                            type="checkbox"
+                            checked={this.state.data.isprovider}
+                            onChange={e => this.setData({ isprovider: e.target.checked })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Content</td>
+                        <td>Customer</td>
                         <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.content}
-                            onChange={e => this.setData({ content: e.target.value })}
+                            type="checkbox"
+                            checked={this.state.data.iscustomer}
+                            onChange={e => this.setData({ iscustomer: e.target.checked })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Consultant</td>
+                        <td><input
+                            type="checkbox"
+                            checked={this.state.data.isconsult}
+                            onChange={e => this.setData({ isconsult: e.target.checked })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Auditor</td>
+                        <td><input
+                            type="checkbox"
+                            checked={this.state.data.isauditor}
+                            onChange={e => this.setData({ isauditor: e.target.checked })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Third-party Vendor</td>
+                        <td><input
+                            type="checkbox"
+                            checked={this.state.data.is3pvendor}
+                            onChange={e => this.setData({ is3pvendor: e.target.checked })}
                         /></td>
                     </tr>
                 </tbody>
@@ -147,16 +164,16 @@ export class UsersList extends React.Component<{}, { content: string }> {
                 });
                 let content =
                     'id                Company          isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
-                    '================================================================================================\n';
+                    '\n';
                 for (let row of rows.rows)
                     content +=
                         (row.id + '').padEnd(16) +
-                        (row.company).padEnd(22) + '  ' +
-                        (row.isprovider + '').padEnd(12) +
-                        (row.iscustomer + '').padEnd(12) +
-                        (row.isconsult + '').padEnd(12) +
-                        (row.isauditor + '').padEnd(12) +
-                        row.is3pvendor + '\n';
+                        (row.company).padEnd(20) + '  ' +
+                        (Boolean(row.isprovider) + '').padEnd(13) +
+                        (Boolean(row.iscustomer) + '').padEnd(12) +
+                        (Boolean(row.isconsult) + '').padEnd(11) +
+                        (Boolean(row.isauditor) + '').padEnd(11) +
+                        Boolean(row.is3pvendor) + '\n';
                 this.setState({ content });
             } catch (e) {
                 if (e.json)

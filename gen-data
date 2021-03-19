@@ -1,0 +1,9 @@
+./init
+
+cleos push action slm.users post '[1001, slm.provider,  1, 0, 0, 0, 0]' -p slm.provider
+cleos push action slm.users post '[1002, slm.customer,  0, 1, 0, 0, 0]' -p slm.customer
+cleos push action slm.users post '[1003, slm.consult,  0, 0, 1, 0, 0]' -p slm.consult
+cleos push action slm.users post '[1004, slm.auditor,  0, 0, 0, 1, 0]' -p slm.auditor
+cleos push action slm.users post '[1005, slm.3pvendor,  0, 0, 0, 0, 1]' -p slm.3pvendor
+
+cleos get table slm.users slm.users slmusers

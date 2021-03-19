@@ -47,17 +47,18 @@ class MainWindow extends React.Component<{}, MainWindowState> {
     render() {
         const { showUserManagementDapp, showUsageTrackingDapp } = this.state;
         let userManagementButtonBackgroud = this.state.showUserManagementDapp ? 'white' : 'blue';
-    
+
         return <div>
             <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager DApps</h1>
             <br />
             <ul>
-                <li><a className = {this.state.showUserManagementDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showUserManagementDapp")}>Users Mananagement</a></li>
-                <li><a className = {this.state.showUsageTrackingDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showUsageTrackingDapp")}>Usage Tracking</a></li>
-                <li><a className = {this.state.showSoftwareMarketplaceDapp ? "clicked" : "notClicked"}  onClick={() => this.showComponent("showSoftwareMarketplaceDapp")}>Software Marketplace</a></li>
-                <li><a className = {this.state.showSecureNotificationsDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSecureNotificationsDapp")}>Secure Notifications</a></li>
+                <li><a className={this.state.showSecureNotificationsDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSecureNotificationsDapp")}>Secure Notifications</a></li>
+                <li><a className={this.state.showUserManagementDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showUserManagementDapp")}>Users Mananagement</a></li>
+                <li><a className={this.state.showUsageTrackingDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showUsageTrackingDapp")}>Usage Tracking</a></li>
+                <li><a className={this.state.showSoftwareMarketplaceDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSoftwareMarketplaceDapp")}>Software Marketplace</a></li>
             </ul>
-
+            <br />
+            <br />
 
             {showUserManagementDapp && <table className="panel">
                 <caption> <h3>User Mananagement Panel DApp</h3></caption>
