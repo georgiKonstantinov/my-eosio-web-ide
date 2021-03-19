@@ -1,3 +1,8 @@
+:root {
+  --main-orange-color: #E67E22;
+  --menu-color: #333;
+}
+
 table {
     border-collapse: collapse;
 }
@@ -13,7 +18,7 @@ th, td {
 
 table.panel { 
     border: solid 10px;
-    border-Color: #E67E22;
+    border-Color: var(--main-orange-color);
 }
 
 ul {
@@ -21,7 +26,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: var(--menu-color);
 }
 
 li {
@@ -37,14 +42,14 @@ li a {
 }
 
 li a:hover {
-  background-color: #111;
+  background-color: var(--main-orange-color);;
 }
 
 .clicked{
-  background-color: #E67E22;
+  background-color: var(--main-orange-color);;
 ;
 }
 
 .notClicked{
-  background-color: #333;
+  background-color: var(--menu-color);
 }
