@@ -6,7 +6,7 @@ import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
 const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 
-interface PostDataUsageTracking {
+interface PostDataSoftwareMarketplace {
     id?: number;
     company?: string;
     isprovider?: boolean;
@@ -16,13 +16,13 @@ interface PostDataUsageTracking {
     is3pvendor?: boolean;
 };
 
-interface PostFormStateUsageTracking {
+interface PostFormStateSoftwareMarketplace {
     privateKey: string;
-    data: PostDataUsageTracking;
+    data: PostDataSoftwareMarketplace;
     error: string;
 };
 
-export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsageTracking> {
+export class PostFormSoftwareMarketPlace extends React.Component<{}, PostFormStateSoftwareMarketplace> {
     api: Api;
 
     constructor(props: {}) {
@@ -43,7 +43,7 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
         };
     }
 
-    setData(data: PostDataUsageTracking) {
+    setData(data: PostDataSoftwareMarketplace) {
         this.setState({ data: { ...this.state.data, ...data } });
     }
 
@@ -148,7 +148,7 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
     }
 }
 
-export class UsageTrackingData extends React.Component<{}, { content: string }> {
+export class SoftwareMarketplaceData extends React.Component<{}, { content: string }> {
     interval: number;
 
     constructor(props: {}) {

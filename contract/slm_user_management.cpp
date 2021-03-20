@@ -1,21 +1,3 @@
-/*RegAccount
-owner (key)
-companyid
-isprovider
-iscustomer
-isconsult
-isauditor
-is3pvendor
-
-RegRelation
-owner (key)
-account (key)
-isprovider
-iscustomer
-isconsult
-isauditor
-is3pvendor*/
-
 #include <eosio/eosio.hpp>
 
 
@@ -35,30 +17,22 @@ using namespace eosio;
 
 
 typedef eosio::multi_index<name("slmusers"), slm_users_record> slm_users_index; 
-//  using slm_users_table = eosio::multi_index<
-//     "slm_users"_n, slm_users, eosio::indexed_by<"by.isprovider"_n>>;
 
 
-// The contract
 class slm_user_management : eosio::contract {
   public:
-    // Use contract's constructor
     using contract::contract;
 
-    // Post a new company
+
     [[eosio::action]] void post(uint64_t id, eosio::name company, bool isprovider, bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
         slm_users_index table(get_self(), get_self().value);
 
-        // Check user
         require_auth(company);
 
-   
-        // Create an ID if user didn't specify one
         eosio::check(id < 1'000'000'000ull, "user-specified company id is too big");
         if (!id)
             id = std::max(table.available_primary_key(), 1'000'000'000ull);
 
-        // Record the message
         table.emplace(get_self(), [&](auto& slm_users) {
             slm_users.id    = id;
             slm_users.company    = company;

@@ -1,7 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { PostForm, Messages } from "./usageTrackingDApp";
+import { PostFormSecureNotification, SecureNotificationData } from "./secureNotificationDApp";
 import { PostFormUserManagement, UsersList } from "./userManagementDApp";
+import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDApp";
+import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData } from "./softwareMarketplaceDApp";
 
 interface MainWindowState {
     showUserManagementDapp: boolean,
@@ -16,10 +18,10 @@ class MainWindow extends React.Component<{}, MainWindowState> {
         super(props);
 
         this.state = {
-            showUserManagementDapp: true,
+            showSecureNotificationsDapp: true,
+            showUserManagementDapp: false,
             showUsageTrackingDapp: false,
             showSoftwareMarketplaceDapp: false,
-            showSecureNotificationsDapp: false,
         };
         this.showComponent = this.showComponent.bind(this);
     }
@@ -45,7 +47,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
     }
 
     render() {
-        const { showUserManagementDapp, showUsageTrackingDapp } = this.state;
+        const { showUserManagementDapp, showUsageTrackingDapp, showSoftwareMarketplaceDapp, showSecureNotificationsDapp } = this.state;
         let userManagementButtonBackgroud = this.state.showUserManagementDapp ? 'white' : 'blue';
 
         return <div>
@@ -59,6 +61,18 @@ class MainWindow extends React.Component<{}, MainWindowState> {
             </ul>
             <br />
             <br />
+
+            {showSecureNotificationsDapp && <table className="panel">
+                <caption> <h3>Secure Nofitications DApp</h3></caption>
+                <tbody>
+                    <tr>
+                        <PostFormSecureNotification />
+                        <br />
+        Notifications:
+        <SecureNotificationData />
+                    </tr>
+                </tbody>
+            </table>}
 
             {showUserManagementDapp && <table className="panel">
                 <caption> <h3>User Mananagement Panel DApp</h3></caption>
@@ -77,10 +91,22 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                 <caption><h3>Usage Tracking DApp</h3></caption>
                 <tbody>
                     <tr>
-                        <PostForm />
+                        <PostFormUsageTracking />
                         <br />
-        Messages:
-        <Messages />
+        Usage Tracking Data:
+        <UsageTrackingData />
+                    </tr>
+                </tbody>
+            </table>}
+
+            {showSoftwareMarketplaceDapp && <table className="panel">
+                <caption><h3>Software Marketplace DApp</h3></caption>
+                <tbody>
+                    <tr>
+                        <PostFormSoftwareMarketPlace />
+                        <br />
+        Marketplace Data:
+        <SoftwareMarketplaceData />
                     </tr>
                 </tbody>
             </table>}
