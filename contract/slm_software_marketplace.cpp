@@ -12,7 +12,7 @@ using namespace eosio;
     std::string info;
     std::vector<uint64_t> partof;
     std::vector<uint64_t> dependencies;
-    std::string ipfs_hash;
+    std::vector<std::string> ipfs_hash;
 
     uint64_t primary_key() const { return id; }
 };
@@ -26,7 +26,7 @@ class slm_software_marketplace : eosio::contract {
     using contract::contract;
 
 
-    [[eosio::action]] void post(uint64_t id, eosio::name provider,  std::string name, std::string version, std::string status, std::string info, std::vector<uint64_t> partof, std::vector<uint64_t> dependencies, std::string ipfs_hash) {
+    [[eosio::action]] void post(uint64_t id, eosio::name provider,  std::string name, std::string version, std::string status, std::string info, std::vector<uint64_t> partof, std::vector<uint64_t> dependencies,   std::vector<std::string> ipfs_hash) {
         slm_software_marketplace_index table(get_self(), get_self().value);
 
         require_auth(provider);

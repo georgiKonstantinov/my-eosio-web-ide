@@ -16,6 +16,11 @@ eosio-cpp contract/slm_user_management.cpp
 cleos set code slm.users slm_user_management.wasm
 cleos set abi slm.users slm_user_management.abi
 
+echo deploying slm_software_marketplace
+eosio-cpp contract/slm_software_marketplace.cpp 
+cleos set code slm.swmarket slm_software_marketplace.wasm
+cleos set abi slm.swmarket slm_software_marketplace.abi
+
 echo deploying slm_secure_notification
 eosio-cpp contract/slm_secure_notification.cpp 
 cleos set code slm.notify slm_secure_notification.wasm
@@ -26,8 +31,4 @@ eosio-cpp contract/slm_usage_tracking.cpp
 cleos set code slm.tracking slm_usage_tracking.wasm
 cleos set abi slm.tracking slm_usage_tracking.abi
 
-echo deploying slm_software_marketplace
-eosio-cpp contract/slm_software_marketplace.cpp 
-cleos set code slm.swmarket slm_software_marketplace.wasm
-cleos set abi slm.swmarket slm_software_marketplace.abi
 

@@ -11,10 +11,10 @@ echo printing users table
 cleos get table slm.users slm.users slmusers
 
 echo generating sample marketplace data
-cleos push action slm.swmarket post '[1000, slm.provider, "Manufacturing Controller",  "1.0.0", "beta", "Comopnent info", [], [], "ipfs_hash"]' -p slm.provider
-cleos push action slm.swmarket post '[1001, slm.provider, "Manufacturing Controller Core",  "1.0.0", "beta", "Comopnent info", [1000], [], "ipfs_hash"]' -p slm.provider
-cleos push action slm.swmarket post '[1002, slm.provider, "Manufacturing Controller IoT ",  "1.0.0", "beta", "Comopnent info", [1000], [1001], "ipfs_hash"]' -p slm.provider
-cleos push action slm.swmarket post '[1003, slm.provider, "Manufacturing Controller UI",  "1.0.0", "beta", "Comopnent info", [1000], [1001, 1002], "ipfs_hash"]' -p slm.provider
+cleos push action slm.swmarket post '[1000, slm.provider, "Manufacturing Controller",  "1.0.0", "beta", "Comopnent info", [], [], ['ipfs_hash1', 'ipfs_hash2', , 'ipfs_hash2']]' -p slm.provider
+cleos push action slm.swmarket post '[1001, slm.provider, "Manufacturing Controller Core",  "1.0.0", "beta", "Comopnent info", [1000], [], ['ipfs_hash1', 'ipfs_hash2']]' -p slm.provider
+cleos push action slm.swmarket post '[1002, slm.provider, "Manufacturing Controller IoT ",  "1.0.0", "beta", "Comopnent info", [1000], [1001], ['ipfs_hash']]' -p slm.provider
+cleos push action slm.swmarket post '[1003, slm.provider, "Manufacturing Controller UI",  "1.0.0", "beta", "Comopnent info", [1000], [1001, 1002], ['ipfs_hash']]' -p slm.provider
 
 echo printing marketplace table
 cleos get table slm.swmarket slm.swmarket slmswmarket
@@ -22,8 +22,6 @@ cleos get table slm.swmarket slm.swmarket slmswmarket
 echo generating sample usage tracking data
 cleos push action slm.tracking post '[1000, slm.customer, slm.provider, 1001,  "1.0.0", "SampleSystemID", "This is my performance data", ['ipfs_hash1', 'ipfs_has2']]' -p slm.customer
 cleos push action slm.tracking post '[1001, slm.customer, slm.provider, 1002,  "1.0.0", "SampleIoTSystemID", "This is flapping error data", ['ipfs_hash']]' -p slm.customer
-
-
 
 echo printing usage tracking table
 cleos get table slm.tracking slm.tracking slmtracking
