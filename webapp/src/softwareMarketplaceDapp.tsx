@@ -8,12 +8,14 @@ const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 interface PostDataSoftwareMarketplace {
     id?: number;
-    company?: string;
-    isprovider?: boolean;
-    iscustomer?: boolean;
-    isconsult?: boolean;
-    isauditor?: boolean;
-    is3pvendor?: boolean;
+    provider?: string;
+    name?: string;
+    version?: string;
+    status?: string;
+    info?: string;
+    partof?: string;
+    dependencies?: string;
+    ipfs_hash?: string;
 };
 
 interface PostFormStateSoftwareMarketplace {
@@ -32,12 +34,14 @@ export class PostFormSoftwareMarketPlace extends React.Component<{}, PostFormSta
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                company: "",
-                isprovider: false,
-                iscustomer: false,
-                isconsult: false,
-                isauditor: false,
-                is3pvendor: false,
+                provider: "",
+                name: "",
+                version: "",
+                status: "",
+                info: "",
+                partof: "",
+                dependencies: "",
+                ipfs_hash: ""
             },
             error: '',
         };
@@ -53,10 +57,10 @@ export class PostFormSoftwareMarketPlace extends React.Component<{}, PostFormSta
             const result = await this.api.transact(
                 {
                     actions: [{
-                        account: 'slm.users',
+                        account: 'slm.swmarket',
                         name: 'post',
                         authorization: [{
-                            actor: this.state.data.company,
+                            actor: this.state.data.provider,
                             permission: 'active',
                         }],
                         data: this.state.data,
@@ -88,57 +92,73 @@ export class PostFormSoftwareMarketPlace extends React.Component<{}, PostFormSta
                         /></td>
                     </tr>
                     <tr>
-                        <td>Company</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.company}
-                            onChange={e => this.setData({ company: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
                         <td>Provider</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isprovider}
-                            onChange={e => this.setData({ isprovider: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.provider}
+                            onChange={e => this.setData({ provider: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Customer</td>
+                        <td>Name</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.iscustomer}
-                            onChange={e => this.setData({ iscustomer: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.name}
+                            onChange={e => this.setData({ name: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Consultant</td>
+                        <td>Version</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isconsult}
-                            onChange={e => this.setData({ isconsult: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.version}
+                            onChange={e => this.setData({ version: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Auditor</td>
+                        <td>Status</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isauditor}
-                            onChange={e => this.setData({ isauditor: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.status}
+                            onChange={e => this.setData({ status: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Third-party Vendor</td>
+                        <td>Info</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.is3pvendor}
-                            onChange={e => this.setData({ is3pvendor: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.info}
+                            onChange={e => this.setData({ info: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Part Of</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.partof}
+                            onChange={e => this.setData({ partof: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Depends On</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.dependencies}
+                            onChange={e => this.setData({ dependencies: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>IPFS Hashes</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.ipfs_hash}
+                            onChange={e => this.setData({ ipfs_hash: e.target.value })}
                         /></td>
                     </tr>
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Post</button>
+            <button onClick={e => this.post()}>Submit Software to Marketplace</button>
             {this.state.error && <div>
                 <br />
                 Error:
@@ -160,20 +180,22 @@ export class SoftwareMarketplaceData extends React.Component<{}, { content: stri
         this.interval = window.setInterval(async () => {
             try {
                 const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
+                    json: true, code: 'slm.swmarket', scope: 'slm.swmarket', table: 'slmswmarket', limit: 1000,
                 });
                 let content =
-                    'id                Company          isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
+                    'id                Provider                      Name                          Version            Status           Info                Part Of           Depends On             IPFS Hash\n' +
                     '\n';
                 for (let row of rows.rows)
                     content +=
                         (row.id + '').padEnd(16) +
-                        (row.company).padEnd(20) + '  ' +
-                        (Boolean(row.isprovider) + '').padEnd(13) +
-                        (Boolean(row.iscustomer) + '').padEnd(12) +
-                        (Boolean(row.isconsult) + '').padEnd(11) +
-                        (Boolean(row.isauditor) + '').padEnd(11) +
-                        Boolean(row.is3pvendor) + '\n';
+                        (row.provider).padEnd(20) + '  ' +
+                        (row.name).padEnd(39) + '  ' +
+                        (row.version).padEnd(17) + '  ' +
+                        (row.status).padEnd(11) + '  ' +
+                        (row.info).padEnd(22) + '  ' +
+                        (row.partof + '').padEnd(18) +
+                        (row.dependencies + '').padEnd(20) +
+                        (row.ipfs_hash + '') + '\n';
                 this.setState({ content });
             } catch (e) {
                 if (e.json)

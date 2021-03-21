@@ -148,7 +148,7 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Post</button>
+            <button onClick={e => this.post()}>Create User</button>
             {this.state.error && <div>
                 <br />
                 Error:

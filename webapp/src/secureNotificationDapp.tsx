@@ -8,12 +8,10 @@ const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 interface PostDataSecureNotification {
     id?: number;
-    company?: string;
-    isprovider?: boolean;
-    iscustomer?: boolean;
-    isconsult?: boolean;
-    isauditor?: boolean;
-    is3pvendor?: boolean;
+    sender?: string;
+    receiver?: string;
+    message?: string;
+    component?: number;
 };
 
 interface PostFormStateSecureNotification {
@@ -32,12 +30,10 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                company: "",
-                isprovider: false,
-                iscustomer: false,
-                isconsult: false,
-                isauditor: false,
-                is3pvendor: false,
+                sender: "",
+                receiver: "",
+                message: "",
+                component: 1000,
             },
             error: '',
         };
@@ -53,10 +49,10 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             const result = await this.api.transact(
                 {
                     actions: [{
-                        account: 'slm.users',
+                        account: 'slm.notify',
                         name: 'post',
                         authorization: [{
-                            actor: this.state.data.company,
+                            actor: this.state.data.sender,
                             permission: 'active',
                         }],
                         data: this.state.data,
@@ -69,9 +65,9 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             this.setState({ error: '' });
         } catch (e) {
             if (e.json)
-                this.setState({ error: JSON.stringify(e.json, null, 4) });
+                this.setState({ error: JSON.stringify(e.json, null, 4) + '' + this.state.data.component });
             else
-                this.setState({ error: '' + e });
+                this.setState({ error: '' + e + '' + this.state.data.component });
         }
     }
 
@@ -88,92 +84,77 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
                         /></td>
                     </tr>
                     <tr>
-                        <td>Company</td>
+                        <td>Sender</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.company}
-                            onChange={e => this.setData({ company: e.target.value })}
+                            value={this.state.data.sender}
+                            onChange={e => this.setData({ sender: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Provider</td>
+                        <td>Reciever</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isprovider}
-                            onChange={e => this.setData({ isprovider: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.receiver}
+                            onChange={e => this.setData({ receiver: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Customer</td>
+                        <td>Component ID</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.iscustomer}
-                            onChange={e => this.setData({ iscustomer: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.component}
+                            onChange={e => this.setData({ component: +e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Consultant</td>
+                        <td>Message</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isconsult}
-                            onChange={e => this.setData({ isconsult: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.message}
+                            onChange={e => this.setData({ message: e.target.value })}
                         /></td>
                     </tr>
-                    <tr>
-                        <td>Auditor</td>
-                        <td><input
-                            type="checkbox"
-                            checked={this.state.data.isauditor}
-                            onChange={e => this.setData({ isauditor: e.target.checked })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Third-party Vendor</td>
-                        <td><input
-                            type="checkbox"
-                            checked={this.state.data.is3pvendor}
-                            onChange={e => this.setData({ is3pvendor: e.target.checked })}
-                        /></td>
-                    </tr>
+
+
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Post</button>
+            <button onClick={e => this.post()}>Notify</button>
             {this.state.error && <div>
                 <br />
                 Error:
                 <code><pre>{this.state.error}</pre></code>
             </div>}
+
         </div>;
     }
 }
 
-export class SecureNotificationData extends React.Component<{}, { content: string }> {
+
+export class SecureNotificationData extends React.Component<{}, { content: string, scope: string }> {
     interval: number;
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///' };
+        this.state = { content: '///', scope: 'slm.notify' };
     }
 
     componentDidMount() {
         this.interval = window.setInterval(async () => {
             try {
                 const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
+                    json: true, code: 'slm.notify', scope: this.state.scope, table: 'slmsecnotify', limit: 1000,
                 });
                 let content =
-                    'id                Company          isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
+                    'id                Sender          Component ID       Message\n' +
                     '\n';
                 for (let row of rows.rows)
                     content +=
                         (row.id + '').padEnd(16) +
-                        (row.company).padEnd(20) + '  ' +
-                        (Boolean(row.isprovider) + '').padEnd(13) +
-                        (Boolean(row.iscustomer) + '').padEnd(12) +
-                        (Boolean(row.isconsult) + '').padEnd(11) +
-                        (Boolean(row.isauditor) + '').padEnd(11) +
-                        Boolean(row.is3pvendor) + '\n';
+                        (row.sender).padEnd(20) + '  ' +
+                        (row.component + '').padEnd(15) +
+                        (row.message).padEnd(12) + '\n';
                 this.setState({ content });
             } catch (e) {
                 if (e.json)
@@ -190,6 +171,36 @@ export class SecureNotificationData extends React.Component<{}, { content: strin
     }
 
     render() {
-        return <code><pre>{this.state.content}</pre></code>;
+        return <code><pre>{this.state.content}</pre></code>
+
+    }
+}
+
+export class PrivateSecureNotificationData extends SecureNotificationData {
+    interval: number;
+
+    constructor(props: {}) {
+        super(props);
+        this.state = { content: '///', scope: 'slm.customer' };
+    }
+
+    render() {
+        return <div>
+            <br />
+            <table style={{ border: "hidden" }}>
+                <tbody>
+                    <tr>
+                        <td>Account</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.scope}
+                            onChange={e => this.setState({ scope: e.target.value })}
+                        /></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <code><pre>{this.state.content}</pre></code>
+        </div>
     }
 }

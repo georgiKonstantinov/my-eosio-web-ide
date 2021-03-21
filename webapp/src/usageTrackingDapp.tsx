@@ -77,7 +77,8 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
 
     render() {
         return <div>
-            <table>
+            <h2 style={{ color: "Green" }}>For to post tracking data will be placed here</h2>
+            {/* <table>
                 <tbody>
                     <tr>
                         <td>Private Key</td>
@@ -143,7 +144,7 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
                 <br />
                 Error:
                 <code><pre>{this.state.error}</pre></code>
-            </div>}
+            </div>} */}
         </div>;
     }
 }
@@ -160,20 +161,21 @@ export class UsageTrackingData extends React.Component<{}, { content: string }> 
         this.interval = window.setInterval(async () => {
             try {
                 const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
+                    json: true, code: 'slm.tracking', scope: 'slm.tracking', table: 'slmtracking', limit: 1000,
                 });
-                let content =
-                    'id                Company          isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
+                let content = 
+                    'id                Customer          Provider       Component     Version       System ID                System Info                           IPFS hash\n' +
                     '\n';
                 for (let row of rows.rows)
                     content +=
                         (row.id + '').padEnd(16) +
-                        (row.company).padEnd(20) + '  ' +
-                        (Boolean(row.isprovider) + '').padEnd(13) +
-                        (Boolean(row.iscustomer) + '').padEnd(12) +
-                        (Boolean(row.isconsult) + '').padEnd(11) +
-                        (Boolean(row.isauditor) + '').padEnd(11) +
-                        Boolean(row.is3pvendor) + '\n';
+                        (row.customer).padEnd(16) + '  ' +
+                        (row.provider).padEnd(20) +
+                        ((row.component) + '').padEnd(12) +
+                        (row.version).padEnd(11) +
+                        (row.sysid).padEnd(25) +
+                        (row.sysinfo).padEnd(35) +
+                        (row.ipfs_hash) + '\n';
                 this.setState({ content });
             } catch (e) {
                 if (e.json)

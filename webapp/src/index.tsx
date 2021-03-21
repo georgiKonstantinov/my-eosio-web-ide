@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { PostFormSecureNotification, SecureNotificationData } from "./secureNotificationDapp";
+import { PostFormSecureNotification, SecureNotificationData, PrivateSecureNotificationData } from "./secureNotificationDapp";
 import { PostFormUserManagement, UsersList } from "./userManagementDapp";
 import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDapp";
 import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData } from "./softwareMarketplaceDapp";
@@ -68,9 +68,13 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                     <tr>
                         <PostFormSecureNotification />
                         <br />
-        Notifications:
-        <SecureNotificationData />
+        Public Notifications:
+        <SecureNotificationData  />
+                        <br />
+        Private Notifications:
+        <PrivateSecureNotificationData />
                     </tr>
+
                 </tbody>
             </table>}
 
@@ -113,6 +117,8 @@ class MainWindow extends React.Component<{}, MainWindowState> {
         </div>;
     }
 }
+
+
 ReactDOM.render(
 
     <div> <MainWindow /> </div>,
