@@ -43,7 +43,7 @@ class slm_user_management : eosio::contract {
             slm_users.is3pvendor = is3pvendor;
         });
 
-        print("Createdd company: ", company);
+        print("Created company: ", company);
     }
 };
 

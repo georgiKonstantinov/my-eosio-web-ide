@@ -1,9 +1,19 @@
 ./init
 
+echo generating sample users data
 cleos push action slm.users post '[1001, slm.provider,  1, 0, 0, 0, 0]' -p slm.provider
 cleos push action slm.users post '[1002, slm.customer,  0, 1, 0, 0, 0]' -p slm.customer
 cleos push action slm.users post '[1003, slm.consult,  0, 0, 1, 0, 0]' -p slm.consult
 cleos push action slm.users post '[1004, slm.auditor,  0, 0, 0, 1, 0]' -p slm.auditor
 cleos push action slm.users post '[1005, slm.3pvendor,  0, 0, 0, 0, 1]' -p slm.3pvendor
 
+echo printing users table
 cleos get table slm.users slm.users slmusers
+
+echo generating sample notifications data
+cleos push action slm.notify post '[1000, slm.provider, "",  "this is notification to all", 0]' -p slm.provider
+cleos push action slm.notify post '[1001, slm.provider, slm.customer,  "this is notification to customer", 0]' -p slm.provider
+
+echo printing users table
+cleos get table slm.notify slm.notify slmsecnotify
+cleos get table slm.notify slm.customer slmsecnotify
