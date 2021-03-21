@@ -19,6 +19,15 @@ cleos push action slm.swmarket post '[1003, slm.provider, "Manufacturing Control
 echo printing marketplace table
 cleos get table slm.swmarket slm.swmarket slmswmarket
 
+echo generating sample usage tracking data
+cleos push action slm.tracking post '[1000, slm.customer, slm.provider, 1001,  "1.0.0", "SampleSystemID", "This is my performance data", ['ipfs_hash1', 'ipfs_has2']]' -p slm.customer
+cleos push action slm.tracking post '[1001, slm.customer, slm.provider, 1002,  "1.0.0", "SampleIoTSystemID", "This is flapping error data", ['ipfs_hash']]' -p slm.customer
+
+
+
+echo printing usage tracking table
+cleos get table slm.tracking slm.tracking slmtracking
+
 
 echo generating sample notifications data
 cleos push action slm.notify post '[1000, slm.provider, "",  "this is notification to all", 1001]' -p slm.provider
