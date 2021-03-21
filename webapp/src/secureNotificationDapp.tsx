@@ -30,9 +30,9 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                sender: "",
-                receiver: "",
-                message: "",
+                sender: '',
+                receiver: '',
+                message: '',
                 component: 1000,
             },
             error: '',
@@ -43,7 +43,7 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
         this.setState({ data: { ...this.state.data, ...data } });
     }
 
-    async post() {
+   async post() {
         try {
             this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
             const result = await this.api.transact(
@@ -65,9 +65,9 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             this.setState({ error: '' });
         } catch (e) {
             if (e.json)
-                this.setState({ error: JSON.stringify(e.json, null, 4) + '' + this.state.data.component });
+                this.setState({ error: JSON.stringify(e.json, null, 4) });
             else
-                this.setState({ error: '' + e + '' + this.state.data.component });
+                this.setState({ error: '' + e });
         }
     }
 
@@ -132,19 +132,19 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
 }
 
 
-export class SecureNotificationData extends React.Component<{}, { content: string, scope: string }> {
+export class SecureNotificationData extends React.Component<{}, { content: string, custom_scope: string }> {
     interval: number;
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///', scope: 'slm.notify' };
+        this.state = { content: '///', custom_scope: 'slm.notify' };
     }
 
     componentDidMount() {
         this.interval = window.setInterval(async () => {
             try {
                 const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.notify', scope: this.state.scope, table: 'slmsecnotify', limit: 1000,
+                    json: true, code: 'slm.notify', scope: this.state.custom_scope, table: 'slmsecnotify', limit: 1000,
                 });
                 let content =
                     'id                Sender          Component ID       Message\n' +
@@ -181,7 +181,7 @@ export class PrivateSecureNotificationData extends SecureNotificationData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///', scope: 'slm.customer' };
+        this.state = { content: '///', custom_scope: 'slm.customer' };
     }
 
     render() {
@@ -193,8 +193,8 @@ export class PrivateSecureNotificationData extends SecureNotificationData {
                         <td>Account</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.scope}
-                            onChange={e => this.setState({ scope: e.target.value })}
+                            value={this.state.custom_scope}
+                            onChange={e => this.setState({ custom_scope: e.target.value })}
                         /></td>
                     </tr>
                 </tbody>

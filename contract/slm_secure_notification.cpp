@@ -19,7 +19,7 @@ class slm_secure_notification : eosio::contract {
   public:
     using contract::contract;
 
-    [[eosio::action]] void post(uint64_t id, eosio::name sender, eosio::name receiver, const std::string& message, uint64_t comopnent) {
+    [[eosio::action]] void post(uint64_t id, eosio::name sender, eosio::name receiver, const std::string message, uint64_t component) {
         eosio::name scope = get_self(); 
         if(receiver.value != 0) {
             scope = receiver;
@@ -37,7 +37,7 @@ class slm_secure_notification : eosio::contract {
             slm_secure_notifications.id    = id;
             slm_secure_notifications.sender = sender;
             slm_secure_notifications.message  = message;
-            slm_secure_notifications.component = comopnent;
+            slm_secure_notifications.component = component;
         });
 
         print("Created nofication: ", message);
