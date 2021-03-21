@@ -8,12 +8,13 @@ const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 interface PostDataUsageTracking {
     id?: number;
-    company?: string;
-    isprovider?: boolean;
-    iscustomer?: boolean;
-    isconsult?: boolean;
-    isauditor?: boolean;
-    is3pvendor?: boolean;
+    customer?: string;
+    provider?: string;
+    component?: string;
+    version?: string;
+    sysid?: string;
+    sysinfo?: string,
+    ipfs_hash?: string
 };
 
 interface PostFormStateUsageTracking {
@@ -32,12 +33,13 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                company: "",
-                isprovider: false,
-                iscustomer: false,
-                isconsult: false,
-                isauditor: false,
-                is3pvendor: false,
+                customer: '',
+                provider: '',
+                component: '',
+                version: '',
+                sysid: '',
+                sysinfo: '',
+                ipfs_hash: ''
             },
             error: '',
         };
@@ -53,10 +55,10 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
             const result = await this.api.transact(
                 {
                     actions: [{
-                        account: 'slm.users',
+                        account: 'slm.tracking',
                         name: 'post',
                         authorization: [{
-                            actor: this.state.data.company,
+                            actor: this.state.data.customer,
                             permission: 'active',
                         }],
                         data: this.state.data,
@@ -77,8 +79,8 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
 
     render() {
         return <div>
-            <h2 style={{ color: "Green" }}>For to post tracking data will be placed here</h2>
-            {/* <table>
+
+            <table>
                 <tbody>
                     <tr>
                         <td>Private Key</td>
@@ -92,60 +94,69 @@ export class PostFormUsageTracking extends React.Component<{}, PostFormStateUsag
                         <td>Company</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.company}
-                            onChange={e => this.setData({ company: e.target.value })}
+                            value={this.state.data.customer}
+                            onChange={e => this.setData({ customer: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
                         <td>Provider</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isprovider}
-                            onChange={e => this.setData({ isprovider: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.provider}
+                            onChange={e => this.setData({ provider: e.target.value })}
+                        /></td>
+                    </tr>
+                     <tr>
+                        <td>Component Id</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.component}
+                            onChange={e => this.setData({ component: e.target.value })}
+                        /></td>
+                    </tr>
+                      <tr>
+                        <td>Version</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.version}
+                            onChange={e => this.setData({ version: e.target.value })}
+                        /></td>
+                    </tr>
+                      <tr>
+                        <td>System ID</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.sysid}
+                            onChange={e => this.setData({ sysid: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
-                        <td>Customer</td>
+                        <td>System Info</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.iscustomer}
-                            onChange={e => this.setData({ iscustomer: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.sysinfo}
+                            onChange={e => this.setData({ sysinfo: e.target.value })}
                         /></td>
                     </tr>
-                    <tr>
-                        <td>Consultant</td>
+                      <tr>
+                        <td>IPFS hash</td>
                         <td><input
-                            type="checkbox"
-                            checked={this.state.data.isconsult}
-                            onChange={e => this.setData({ isconsult: e.target.checked })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Auditor</td>
-                        <td><input
-                            type="checkbox"
-                            checked={this.state.data.isauditor}
-                            onChange={e => this.setData({ isauditor: e.target.checked })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Third-party Vendor</td>
-                        <td><input
-                            type="checkbox"
-                            checked={this.state.data.is3pvendor}
-                            onChange={e => this.setData({ is3pvendor: e.target.checked })}
+                            style={{ width: 500 }}
+                            value={this.state.data.ipfs_hash}
+                            onChange={e => this.setData({ ipfs_hash: e.target.value })}
                         /></td>
                     </tr>
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Post</button>
+            <button onClick={e => this.post()}>Submit Tracking Data</button>
             {this.state.error && <div>
                 <br />
                 Error:
                 <code><pre>{this.state.error}</pre></code>
-            </div>} */}
+            </div>}
         </div>;
+
     }
 }
 
@@ -163,8 +174,8 @@ export class UsageTrackingData extends React.Component<{}, { content: string }> 
                 const rows = await rpc.get_table_rows({
                     json: true, code: 'slm.tracking', scope: 'slm.tracking', table: 'slmtracking', limit: 1000,
                 });
-                let content = 
-                    'id                Customer          Provider       Component     Version       System ID                System Info                           IPFS hash\n' +
+                let content =
+                    'id                Customer          Provider       ComponentID   Version       System ID                System Info                           IPFS hash\n' +
                     '\n';
                 for (let row of rows.rows)
                     content +=
