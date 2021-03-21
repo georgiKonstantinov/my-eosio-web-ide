@@ -10,9 +10,19 @@ cleos push action slm.users post '[1005, slm.3pvendor,  0, 0, 0, 0, 1]' -p slm.3
 echo printing users table
 cleos get table slm.users slm.users slmusers
 
+echo generating sample marketplace data
+cleos push action slm.swmarket post '[1000, slm.provider, "Manufacturing Controller",  "1.0.0", "beta", "Comopnent info", [], [], "ipfs_hash"]' -p slm.provider
+cleos push action slm.swmarket post '[1001, slm.provider, "Manufacturing Controller Core",  "1.0.0", "beta", "Comopnent info", [1000], [], "ipfs_hash"]' -p slm.provider
+cleos push action slm.swmarket post '[1002, slm.provider, "Manufacturing Controller IoT ",  "1.0.0", "beta", "Comopnent info", [1000], [1001], "ipfs_hash"]' -p slm.provider
+cleos push action slm.swmarket post '[1003, slm.provider, "Manufacturing Controller UI",  "1.0.0", "beta", "Comopnent info", [1000], [1001, 1002], "ipfs_hash"]' -p slm.provider
+
+echo printing marketplace table
+cleos get table slm.swmarket slm.swmarket slmswmarket
+
+
 echo generating sample notifications data
-cleos push action slm.notify post '[1000, slm.provider, "",  "this is notification to all", 0]' -p slm.provider
-cleos push action slm.notify post '[1001, slm.provider, slm.customer,  "this is notification to customer", 0]' -p slm.provider
+cleos push action slm.notify post '[1000, slm.provider, "",  "this is notification to all", 1001]' -p slm.provider
+cleos push action slm.notify post '[1001, slm.provider, slm.customer,  "this is notification to customer", 1003]' -p slm.provider
 
 echo printing users table
 cleos get table slm.notify slm.notify slmsecnotify

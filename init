@@ -1,15 +1,26 @@
+echo creating accounts for smart contracts
 cleos create account eosio slm.users EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.notify EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.swmarket EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+
+echo creating accounts for users
 cleos create account eosio slm.provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.customer EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.consult EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.auditor EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.3pvendor EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 
+echo deploying slm_user_management
 eosio-cpp contract/slm_user_management.cpp
 cleos set code slm.users slm_user_management.wasm
 cleos set abi slm.users slm_user_management.abi
 
+echo deploying slm_user_management slm_secure_notification
 eosio-cpp contract/slm_secure_notification.cpp 
 cleos set code slm.notify slm_secure_notification.wasm
 cleos set abi slm.notify slm_secure_notification.abi
+
+echo deploying slm_software_marketplace
+eosio-cpp contract/slm_software_marketplace.cpp 
+cleos set code slm.swmarket slm_software_marketplace.wasm
+cleos set abi slm.swmarket slm_software_marketplace.abi
