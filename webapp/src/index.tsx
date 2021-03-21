@@ -75,7 +75,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
             </table>}
 
             {showUserManagementDapp && <table className="panel">
-                <caption> <h3>User Mananagement Panel DApp</h3></caption>
+                <caption> <h3>User Mananagement Dapp</h3></caption>
                 <tbody>
                     <tr>
                         <PostFormUserManagement />

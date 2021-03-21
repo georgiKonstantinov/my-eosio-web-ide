@@ -4,8 +4,9 @@
 using namespace eosio;
 
  struct [[eosio::table("slmusers"), eosio::contract("slm_user_management")]]  slm_users_record {
-    uint64_t    id       = {}; // Non-0
-    eosio::name company     = {};
+    uint64_t id  = {}; // Non-0
+    eosio::name account = {};
+    std::string name;
     bool isprovider = false;
     bool iscustomer  = false;
     bool isconsult = false;
@@ -24,10 +25,10 @@ class slm_user_management : eosio::contract {
     using contract::contract;
 
 
-    [[eosio::action]] void post(uint64_t id, eosio::name company, bool isprovider, bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
+    [[eosio::action]] void post(uint64_t id, eosio::name account, std::string name, bool isprovider, bool iscustomer, bool isconsult, bool isauditor, bool is3pvendor) {
         slm_users_index table(get_self(), get_self().value);
 
-        require_auth(company);
+        require_auth(account);
 
         eosio::check(id < 1'000'000'000ull, "user-specified company id is too big");
         if (!id)
@@ -35,7 +36,8 @@ class slm_user_management : eosio::contract {
 
         table.emplace(get_self(), [&](auto& slm_users) {
             slm_users.id    = id;
-            slm_users.company    = company;
+            slm_users.account = account;
+            slm_users.name = name;
             slm_users.isprovider = isprovider;
             slm_users.iscustomer  = iscustomer;
             slm_users.isconsult = isconsult;
@@ -43,7 +45,7 @@ class slm_user_management : eosio::contract {
             slm_users.is3pvendor = is3pvendor;
         });
 
-        print("Created company: ", company);
+        print("Created user: ", account);
     }
 };
 

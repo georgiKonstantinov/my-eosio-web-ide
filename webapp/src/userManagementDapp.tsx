@@ -8,7 +8,8 @@ const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 interface PostDataUserManagement {
     id?: number;
-    company?: string;
+    account?: string; 
+    name?: string;
     isprovider?: boolean;
     iscustomer?: boolean;
     isconsult?: boolean;
@@ -32,7 +33,8 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
                 id: 0,
-                company: "",
+                account: "",
+                name: "",
                 isprovider: false,
                 iscustomer: false,
                 isconsult: false,
@@ -56,7 +58,7 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                         account: 'slm.users',
                         name: 'post',
                         authorization: [{
-                            actor: this.state.data.company,
+                            actor: this.state.data.account,
                             permission: 'active',
                         }],
                         data: this.state.data,
@@ -88,11 +90,19 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                         /></td>
                     </tr>
                     <tr>
-                        <td>Company</td>
+                        <td>Account</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.company}
-                            onChange={e => this.setData({ company: e.target.value })}
+                            value={this.state.data.account}
+                            onChange={e => this.setData({ account: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Company name</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.data.name}
+                            onChange={e => this.setData({ name: e.target.value })}
                         /></td>
                     </tr>
                     <tr>
@@ -163,12 +173,13 @@ export class UsersList extends React.Component<{}, { content: string }> {
                     json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
                 });
                 let content =
-                    'id                Company          isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
+                    'id              Account           Company Name               isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
                     '\n';
                 for (let row of rows.rows)
                     content +=
-                        (row.id + '').padEnd(16) +
-                        (row.company).padEnd(20) + '  ' +
+                        (row.id + '').padEnd(15) +
+                        (row.account).padEnd(16) + '  ' +
+                        (row.name + '').padEnd(30) +
                         (Boolean(row.isprovider) + '').padEnd(13) +
                         (Boolean(row.iscustomer) + '').padEnd(12) +
                         (Boolean(row.isconsult) + '').padEnd(11) +
