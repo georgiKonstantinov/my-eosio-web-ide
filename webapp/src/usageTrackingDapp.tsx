@@ -11,7 +11,7 @@ interface PostDataUsageTracking {
     version?: string;
     sysid?: string;
     sysinfo?: string,
-    ipfs_hash?: string
+    ipfs_hash?: string[]
 };
 
 export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTracking> {
@@ -28,7 +28,7 @@ export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTrackin
                 version: '',
                 sysid: '',
                 sysinfo: '',
-                ipfs_hash: ''
+                ipfs_hash: []
             },
             error: '',
         };
@@ -99,8 +99,7 @@ export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTrackin
                         <td>IPFS hash</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.ipfs_hash}
-                            onChange={e => this.setData({ ipfs_hash: e.target.value })}
+                            onChange={e => this.setData({ ipfs_hash: e.target.value.split(',') })}
                         /></td>
                     </tr>
                 </tbody>
@@ -123,7 +122,7 @@ export class UsageTrackingData extends BaseDataPanel {
             json: true, code: 'slm.tracking', scope: 'slm.tracking', table: 'slmtracking', limit: 1000,
         });
         let content =
-            'id                Customer          Provider       ComponentID   Version       System ID                System Info                           IPFS hash\n' +
+            'id                Customer          Provider       ComponentId   Version       System ID                System Info                           IPFS hash\n' +
             '\n';
         for (let row of rows.rows)
             content +=

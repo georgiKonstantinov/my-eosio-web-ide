@@ -9,9 +9,9 @@ interface PostDataSoftwareMarketplace {
     version?: string;
     status?: string;
     info?: string;
-    partof?: string;
+    partof?: number[];
     dependencies?: string;
-    ipfs_hash?: string;
+    ipfs_hash?: string[];
 };
 
 export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwareMarketplace> {
@@ -27,9 +27,9 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                 version: "",
                 status: "",
                 info: "",
-                partof: "",
+                partof: [],
                 dependencies: "",
-                ipfs_hash: ""
+                ipfs_hash: []
             },
             error: '',
         };
@@ -91,24 +91,21 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                         <td>Part Of</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.partof}
-                            onChange={e => this.setData({ partof: e.target.value })}
+                            onChange={e => this.setData({ partof: this.spitStringToNubmerArray(e.target.value) })}
                         /></td>
                     </tr>
                     <tr>
                         <td>Depends On</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.dependencies}
-                            onChange={e => this.setData({ dependencies: e.target.value })}
+                            onChange={e => this.setData({ dependencies: this.spitStringToNubmerArray(e.target.value) })}
                         /></td>
                     </tr>
                     <tr>
                         <td>IPFS Hashes</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={this.state.data.ipfs_hash}
-                            onChange={e => this.setData({ ipfs_hash: e.target.value })}
+                            onChange={e => this.setData({ ipfs_hash: e.target.value.split(',') })}
                         /></td>
                     </tr>
                 </tbody>
@@ -121,6 +118,11 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                 <code><pre>{this.state.error}</pre></code>
             </div>}
         </div>;
+    }
+
+   
+    spitStringToNubmerArray(numberArrayAsString: string){
+          return numberArrayAsString.split(',').map(function(item) {return parseInt(item, 10);})
     }
 }
 
