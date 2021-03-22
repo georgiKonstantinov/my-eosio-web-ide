@@ -1,14 +1,12 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Api, JsonRpc, RpcError } from 'eosjs';
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
+import { BaseDappPostForm, rpc } from "./baseDappPostForm";
+import { BaseDataPanel } from "./BaseDataPanel";
 
-const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
 
 interface PostDataUserManagement {
     id?: number;
-    account?: string; 
+    account?: string;
     name?: string;
     isprovider?: boolean;
     iscustomer?: boolean;
@@ -17,18 +15,11 @@ interface PostDataUserManagement {
     is3pvendor?: boolean;
 };
 
-interface PostFormStateUserManagement {
-    privateKey: string;
-    data: PostDataUserManagement;
-    error: string;
-};
 
-export class PostFormUserManagement extends React.Component<{}, PostFormStateUserManagement> {
-    api: Api;
 
+export class PostFormUserManagement extends BaseDappPostForm<PostDataUserManagement> {
     constructor(props: {}) {
         super(props);
-        this.api = new Api({ rpc, signatureProvider: new JsSignatureProvider([]) });
         this.state = {
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
@@ -43,38 +34,6 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
             },
             error: '',
         };
-    }
-
-    setData(data: PostDataUserManagement) {
-        this.setState({ data: { ...this.state.data, ...data } });
-    }
-
-    async post() {
-        try {
-            this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
-            const result = await this.api.transact(
-                {
-                    actions: [{
-                        account: 'slm.users',
-                        name: 'post',
-                        authorization: [{
-                            actor: this.state.data.account,
-                            permission: 'active',
-                        }],
-                        data: this.state.data,
-                    }]
-                }, {
-                blocksBehind: 3,
-                expireSeconds: 30,
-            });
-            console.log(result);
-            this.setState({ error: '' });
-        } catch (e) {
-            if (e.json)
-                this.setState({ error: JSON.stringify(e.json, null, 4) });
-            else
-                this.setState({ error: '' + e });
-        }
     }
 
     render() {
@@ -148,7 +107,7 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Create User</button>
+            <button onClick={e => this.post(this.state.data.account, 'slm.users')}>Create User</button>
             {this.state.error && <div>
                 <br />
                 Error:
@@ -158,49 +117,25 @@ export class PostFormUserManagement extends React.Component<{}, PostFormStateUse
     }
 }
 
-export class UsersList extends React.Component<{}, { content: string }> {
-    interval: number;
-
-    constructor(props: {}) {
-        super(props);
-        this.state = { content: '///' };
+export class UsersList extends BaseDataPanel {
+    async setContent() {
+        const rows = await rpc.get_table_rows({
+            json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
+        });
+        let content =
+            'id              Account           Company Name               isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
+            '\n';
+        for (let row of rows.rows)
+            content +=
+                (row.id + '').padEnd(15) +
+                (row.account).padEnd(16) + '  ' +
+                (row.name + '').padEnd(30) +
+                (Boolean(row.isprovider) + '').padEnd(13) +
+                (Boolean(row.iscustomer) + '').padEnd(12) +
+                (Boolean(row.isconsult) + '').padEnd(11) +
+                (Boolean(row.isauditor) + '').padEnd(11) +
+                Boolean(row.is3pvendor) + '\n';
+        this.setState({ content });
     }
 
-    componentDidMount() {
-        this.interval = window.setInterval(async () => {
-            try {
-                const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.users', scope: 'slm.users', table: 'slmusers', limit: 1000,
-                });
-                let content =
-                    'id              Account           Company Name               isprovider   iscustomer  isconsult  isauditor  is3pvendor\n' +
-                    '\n';
-                for (let row of rows.rows)
-                    content +=
-                        (row.id + '').padEnd(15) +
-                        (row.account).padEnd(16) + '  ' +
-                        (row.name + '').padEnd(30) +
-                        (Boolean(row.isprovider) + '').padEnd(13) +
-                        (Boolean(row.iscustomer) + '').padEnd(12) +
-                        (Boolean(row.isconsult) + '').padEnd(11) +
-                        (Boolean(row.isauditor) + '').padEnd(11) +
-                        Boolean(row.is3pvendor) + '\n';
-                this.setState({ content });
-            } catch (e) {
-                if (e.json)
-                    this.setState({ content: JSON.stringify(e.json, null, 4) });
-                else
-                    this.setState({ content: '' + e });
-            }
-
-        }, 200);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
-    render() {
-        return <code><pre>{this.state.content}</pre></code>;
-    }
 }

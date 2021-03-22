@@ -1,9 +1,6 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Api, JsonRpc, RpcError } from 'eosjs';
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
-
-const rpc = new JsonRpc(''); // nodeos and web server are on same port
+import { BaseDappPostForm, rpc } from "./baseDappPostForm";
+import { BaseDataPanel } from "./BaseDataPanel";
 
 
 interface PostDataSecureNotification {
@@ -14,18 +11,10 @@ interface PostDataSecureNotification {
     component?: number;
 };
 
-interface PostFormStateSecureNotification {
-    privateKey: string;
-    data: PostDataSecureNotification;
-    error: string;
-};
 
-export class PostFormSecureNotification extends React.Component<{}, PostFormStateSecureNotification> {
-    api: Api;
-
+export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureNotification> {
     constructor(props: {}) {
         super(props);
-        this.api = new Api({ rpc, signatureProvider: new JsSignatureProvider([]) });
         this.state = {
             privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
             data: {
@@ -37,38 +26,6 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
             },
             error: '',
         };
-    }
-
-    setData(data: PostDataSecureNotification) {
-        this.setState({ data: { ...this.state.data, ...data } });
-    }
-
-   async post() {
-        try {
-            this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
-            const result = await this.api.transact(
-                {
-                    actions: [{
-                        account: 'slm.notify',
-                        name: 'post',
-                        authorization: [{
-                            actor: this.state.data.sender,
-                            permission: 'active',
-                        }],
-                        data: this.state.data,
-                    }]
-                }, {
-                blocksBehind: 3,
-                expireSeconds: 30,
-            });
-            console.log(result);
-            this.setState({ error: '' });
-        } catch (e) {
-            if (e.json)
-                this.setState({ error: JSON.stringify(e.json, null, 4) });
-            else
-                this.setState({ error: '' + e });
-        }
     }
 
     render() {
@@ -120,7 +77,7 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
                 </tbody>
             </table>
             <br />
-            <button onClick={e => this.post()}>Notify</button>
+            <button onClick={e => this.post(this.state.data.sender, 'slm.notify')}>Notify</button>
             {this.state.error && <div>
                 <br />
                 Error:
@@ -131,8 +88,7 @@ export class PostFormSecureNotification extends React.Component<{}, PostFormStat
     }
 }
 
-
-export class SecureNotificationData extends React.Component<{}, { content: string, custom_scope: string }> {
+export class SecureNotificationData extends BaseDataPanel {
     interval: number;
 
     constructor(props: {}) {
@@ -140,39 +96,20 @@ export class SecureNotificationData extends React.Component<{}, { content: strin
         this.state = { content: '///', custom_scope: 'slm.notify' };
     }
 
-    componentDidMount() {
-        this.interval = window.setInterval(async () => {
-            try {
-                const rows = await rpc.get_table_rows({
-                    json: true, code: 'slm.notify', scope: this.state.custom_scope, table: 'slmsecnotify', limit: 1000,
-                });
-                let content =
-                    'id                Sender          Component ID       Message\n' +
-                    '\n';
-                for (let row of rows.rows)
-                    content +=
-                        (row.id + '').padEnd(16) +
-                        (row.sender).padEnd(20) + '  ' +
-                        (row.component + '').padEnd(15) +
-                        (row.message).padEnd(12) + '\n';
-                this.setState({ content });
-            } catch (e) {
-                if (e.json)
-                    this.setState({ content: JSON.stringify(e.json, null, 4) });
-                else
-                    this.setState({ content: '' + e });
-            }
-
-        }, 200);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
-    render() {
-        return <code><pre>{this.state.content}</pre></code>
-
+    async setContent() {
+        const rows = await rpc.get_table_rows({
+            json: true, code: 'slm.notify', scope: this.state.custom_scope, table: 'slmsecnotify', limit: 1000,
+        });
+        let content =
+            'id                Sender          Component ID       Message\n' +
+            '\n';
+        for (let row of rows.rows)
+            content +=
+                (row.id + '').padEnd(16) +
+                (row.sender).padEnd(20) + '  ' +
+                (row.component + '').padEnd(15) +
+                (row.message).padEnd(12) + '\n';
+        this.setState({ content });
     }
 }
 
