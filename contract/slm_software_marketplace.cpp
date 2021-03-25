@@ -6,7 +6,7 @@ using namespace eosio;
  struct [[eosio::table("slmswmarket"), eosio::contract("slm_software_marketplace")]]  slm_software_marketplace_record {
     uint64_t id = {}; // Non-0
     eosio::name provider = {};
-    std::string name;
+    std::string productName;
     std::string version ;
     std::string status = "released";
     std::string info;
@@ -26,8 +26,13 @@ class slm_software_marketplace : eosio::contract {
     using contract::contract;
 
 
-    [[eosio::action]] void post(uint64_t id, eosio::name provider,  std::string name, std::string version, std::string status, std::string info, std::vector<uint64_t> partof, std::vector<uint64_t> dependencies,   std::vector<std::string> ipfs_hash) {
-        slm_software_marketplace_index table(get_self(), get_self().value);
+    [[eosio::action]] void post(uint64_t id, eosio::name provider, eosio::name releasedFor,  std::string productName, std::string version, std::string status, std::string info, std::vector<uint64_t> partof, std::vector<uint64_t> dependencies,   std::vector<std::string> ipfs_hash) {
+        eosio::name scope = get_self(); 
+            if(releasedFor.value != 0) {
+            scope = releasedFor;
+        } 
+
+        slm_software_marketplace_index table(get_self(), scope.value);
 
         require_auth(provider);
 
@@ -38,7 +43,7 @@ class slm_software_marketplace : eosio::contract {
         table.emplace(get_self(), [&](auto& slm_software_marketplace) {
             slm_software_marketplace.id = id;
             slm_software_marketplace.provider = provider;
-            slm_software_marketplace.name = name;
+            slm_software_marketplace.productName = productName;
             slm_software_marketplace.version = version;
             slm_software_marketplace.status = status;
             slm_software_marketplace.info = info;
@@ -47,6 +52,6 @@ class slm_software_marketplace : eosio::contract {
             slm_software_marketplace.ipfs_hash = ipfs_hash;
         });
 
-        print("Created record in marketplace: ", name);
+        print("Created record in marketplace: ", productName);
     }
 };
