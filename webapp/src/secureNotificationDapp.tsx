@@ -30,60 +30,67 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
 
     render() {
         return <div>
-            <table>
+            <table className="formBorder">
                 <tbody>
                     <tr>
-                        <td>Private Key</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.privateKey}
-                            onChange={e => this.setState({ privateKey: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Sender</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.sender}
-                            onChange={e => this.setData({ sender: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Reciever</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.receiver}
-                            onChange={e => this.setData({ receiver: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Component ID</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.component}
-                            onChange={e => this.setData({ component: +e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Message</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.message}
-                            onChange={e => this.setData({ message: e.target.value })}
-                        /></td>
-                    </tr>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Private Key</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.privateKey}
+                                        onChange={e => this.setState({ privateKey: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Sender</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.sender}
+                                        onChange={e => this.setData({ sender: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Reciever</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.receiver}
+                                        onChange={e => this.setData({ receiver: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Component ID</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.component}
+                                        onChange={e => this.setData({ component: +e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Message</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.message}
+                                        onChange={e => this.setData({ message: e.target.value })}
+                                    /></td>
+                                </tr>
 
 
-                </tbody>
-            </table>
-            <br />
-            <button onClick={e => this.post(this.state.data.sender, 'slm.notify')}>Notify</button>
-            {this.state.error && <div>
-                <br />
+                            </tbody>
+                        </table>
+                        <br />
+                        <button onClick={e => this.post(this.state.data.sender, 'slm.notify')}>Notify</button>
+                        <br />    <br />
+
+                        {this.state.error && <div>
+                            <br />
                 Error:
                 <code><pre>{this.state.error}</pre></code>
-            </div>}
-
+                        </div>}
+                    </tr>
+                </tbody>
+            </table>
         </div>;
     }
 }
@@ -93,24 +100,63 @@ export class SecureNotificationData extends BaseDataPanel {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///', custom_scope: 'slm.notify' };
+        this.state = { content: [], custom_scope: 'slm.notify' };
     }
 
     async setContent() {
-        const rows = await rpc.get_table_rows({
+        let result = await rpc.get_table_rows({
             json: true, code: 'slm.notify', scope: this.state.custom_scope, table: 'slmsecnotify', limit: 1000,
         });
-        let content =
-            'id                Sender          Component ID       Message\n' +
-            '\n';
-        for (let row of rows.rows)
-            content +=
-                (row.id + '').padEnd(16) +
-                (row.sender).padEnd(20) + '  ' +
-                (row.component + '').padEnd(15) +
-                (row.message).padEnd(12) + '\n';
-        this.setState({ content });
+
+        this.setState({ content: result.rows });
     }
+
+    renderTableData() {
+        return this.state.content.map((row: any, index: number) => {
+            const { id, sender, message, component } = row //destructuring
+            return (
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{sender}</td>
+                    <td>{component}</td>
+                    <td>{message}</td>
+                </tr>
+            )
+        })
+    }
+
+    render() {
+        const  custom_scope  = this.state.custom_scope;
+        return <div>
+            
+            {custom_scope != 'slm.notify' && <table>
+                <tbody>
+                    <tr>
+                        <td>Account</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={custom_scope}
+                            onChange={e => this.setState({ custom_scope: e.target.value })}
+                        /></td>
+                    </tr>
+                </tbody>
+            </table>}
+                <br />
+
+            <table id="contents" >
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sender</th>
+                        <th>Component ID</th>
+                        <th>Message</th>
+                    </tr>
+                    {this.renderTableData()}
+                </tbody>
+            </table>
+        </div >
+    }
+
 }
 
 export class PrivateSecureNotificationData extends SecureNotificationData {
@@ -118,26 +164,7 @@ export class PrivateSecureNotificationData extends SecureNotificationData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///', custom_scope: 'slm.customer' };
+        this.state = { content: [], custom_scope: 'slm.customer' };
     }
 
-    render() {
-        return <div>
-            <br />
-            <table style={{ border: "hidden" }}>
-                <tbody>
-                    <tr>
-                        <td>Account</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.custom_scope}
-                            onChange={e => this.setState({ custom_scope: e.target.value })}
-                        /></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <code><pre>{this.state.content}</pre></code>
-        </div>
-    }
 }

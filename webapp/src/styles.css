@@ -1,6 +1,6 @@
 :root {
   --main-orange-color: #E67E22;
-  --menu-color: #333;
+  --black-color: #333;
 }
 
 table {
@@ -8,7 +8,7 @@ table {
 }
 
 table, th, td {
-    border: solid 1px;
+    border: hidden;
 }
 
 th, td {
@@ -26,7 +26,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: var(--menu-color);
+  background-color: var(--black-color);
 }
 
 li {
@@ -42,14 +42,40 @@ li a {
 }
 
 li a:hover {
-  background-color: var(--main-orange-color);;
+  background-color: var(--main-orange-color);
 }
 
 .clicked{
-  background-color: var(--main-orange-color);;
+  background-color: var(--main-orange-color);
 ;
 }
 
 .notClicked{
-  background-color: var(--menu-color);
+  background-color: var(--black-color);
+}
+
+table.formBorder {
+  border: 3px solid var(--black-color);
+  width: 100%;
+}
+
+
+#contents {
+  text-align: center;
+  border-collapse: collapse;
+  border: 3px solid var(--black-color);
+  width: 100%;
+}
+
+#contents td, #contents th {
+  border: 1px solid var(--black-color);
+  padding: 8px;
+}
+
+#contents tr:nth-child(even){background-color: #f2f2f2;}
+
+#contents th {
+  text-align: center;
+  background-color: var(--main-orange-color);
+  color: white;
 }

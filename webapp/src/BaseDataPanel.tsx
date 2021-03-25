@@ -1,7 +1,7 @@
 import * as React from "react";
 import { rpc } from "./baseDappPostForm";
 
-export class BaseDataPanel extends React.Component<{}, { content: string, custom_scope: string }> {
+export class BaseDataPanel extends React.Component<{}, { content: any, custom_scope: string }> {
     interval: number;
 
     constructor(props: {}) {
