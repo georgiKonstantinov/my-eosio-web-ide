@@ -1,12 +1,12 @@
 import * as React from "react";
 import { rpc } from "./baseDappPostForm";
 
-export class BaseDataPanel extends React.Component<{}, { content: any, custom_scope: string }> {
+export class BaseDataPanel extends React.Component<{}, { content: [], custom_scope: string }> {
     interval: number;
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: '///', custom_scope: '' };
+        this.state = { content: [], custom_scope: '' };
     }
 
     async setContent() {
@@ -15,15 +15,7 @@ export class BaseDataPanel extends React.Component<{}, { content: any, custom_sc
 
     componentDidMount() {
         this.interval = window.setInterval(async () => {
-            try {
-                this.setContent();
-            } catch (e) {
-                if (e.json)
-                    this.setState({ content: JSON.stringify(e.json, null, 4) });
-                else
-                    this.setState({ content: '' + e });
-            }
-
+            this.setContent();
         }, 200);
     }
 

@@ -143,8 +143,9 @@ export class SecureNotificationData extends BaseDataPanel {
             </table>}
                 <br />
 
-            <table id="contents" >
-                <tbody>
+            <table id="contents" >  
+             {custom_scope == 'slm.notify' &&   <caption><h4>Public Notifications</h4></caption>}
+                                     <tbody>
                     <tr>
                         <th>ID</th>
                         <th>Sender</th>

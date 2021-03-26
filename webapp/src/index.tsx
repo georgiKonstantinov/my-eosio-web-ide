@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import { PostFormSecureNotification, SecureNotificationData, PrivateSecureNotificationData } from "./secureNotificationDapp";
 import { PostFormUserManagement, UsersList } from "./userManagementDapp";
 import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDapp";
-import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData } from "./softwareMarketplaceDapp";
+import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData, PrivateSoftwareMarketplaceData } from "./softwareMarketplaceDapp";
 
 interface MainWindowState {
     showUserManagementDapp: boolean,
@@ -48,10 +48,8 @@ class MainWindow extends React.Component<{}, MainWindowState> {
 
     render() {
         const { showUserManagementDapp, showUsageTrackingDapp, showSoftwareMarketplaceDapp, showSecureNotificationsDapp } = this.state;
-        let userManagementButtonBackgroud = this.state.showUserManagementDapp ? 'white' : 'blue';
-
         return <div>
-            <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Dapps</h1>
+            <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Admin Dapps</h1>
             <br />
             <ul>
                 <li><a className={this.state.showSecureNotificationsDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSecureNotificationsDapp")}>Secure Notifications</a></li>
@@ -68,8 +66,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                     <tr>
                         <PostFormSecureNotification />
                         <br />
-        Public Notifications:
-        <SecureNotificationData  />
+                        <SecureNotificationData />
                         <br />
         Private Notifications:
         <PrivateSecureNotificationData />
@@ -84,8 +81,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                     <tr>
                         <PostFormUserManagement />
                         <br />
-        User list:
-        <UsersList />
+                        <UsersList />
                     </tr>
                 </tbody>
             </table>}
@@ -97,8 +93,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                     <tr>
                         <PostFormUsageTracking />
                         <br />
-        Usage Tracking Data:
-        <UsageTrackingData />
+                        <UsageTrackingData />
                     </tr>
                 </tbody>
             </table>}
@@ -109,8 +104,11 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                     <tr>
                         <PostFormSoftwareMarketPlace />
                         <br />
-        Marketplace Data:
-        <SoftwareMarketplaceData />
+                        <SoftwareMarketplaceData />
+                            <br />
+                           Released only for:
+        <PrivateSoftwareMarketplaceData />
+                    
                     </tr>
                 </tbody>
             </table>}

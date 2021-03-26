@@ -37,116 +37,179 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
 
     render() {
         return <div>
-            <table>
+            <table className="formBorder">
                 <tbody>
                     <tr>
-                        <td>Private Key</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.privateKey}
-                            onChange={e => this.setState({ privateKey: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Provider</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.provider}
-                            onChange={e => this.setData({ provider: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Name</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.name}
-                            onChange={e => this.setData({ name: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Version</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.version}
-                            onChange={e => this.setData({ version: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Status</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.status}
-                            onChange={e => this.setData({ status: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Info</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.info}
-                            onChange={e => this.setData({ info: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Part Of</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            onChange={e => this.setData({ partof: this.spitStringToNubmerArray(e.target.value) })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Depends On</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            onChange={e => this.setData({ dependencies: this.spitStringToNubmerArray(e.target.value) })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>IPFS Hashes</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            onChange={e => this.setData({ ipfs_hash: e.target.value.split(',') })}
-                        /></td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Private Key</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.privateKey}
+                                        onChange={e => this.setState({ privateKey: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Provider</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.provider}
+                                        onChange={e => this.setData({ provider: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.name}
+                                        onChange={e => this.setData({ name: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Version</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.version}
+                                        onChange={e => this.setData({ version: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.status}
+                                        onChange={e => this.setData({ status: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Info</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.info}
+                                        onChange={e => this.setData({ info: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Part Of</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        onChange={e => this.setData({ partof: this.spitStringToNubmerArray(e.target.value) })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Depends On</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        onChange={e => this.setData({ dependencies: this.spitStringToNubmerArray(e.target.value) })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>IPFS Hashes</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        onChange={e => this.setData({ ipfs_hash: e.target.value.split(',') })}
+                                    /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <button onClick={e => this.post(this.state.data.provider, 'slm.swmarket')}>Submit Software to Marketplace</button>
+                        <br /> <br />
+                        {this.state.error && <div>
+                            <br />
+                Error:
+                <code><pre>{this.state.error}</pre></code>
+                        </div>}
                     </tr>
                 </tbody>
             </table>
-            <br />
-            <button onClick={e => this.post(this.state.data.provider, 'slm.swmarket')}>Submit Software to Marketplace</button>
-            {this.state.error && <div>
-                <br />
-                Error:
-                <code><pre>{this.state.error}</pre></code>
-            </div>}
         </div>;
     }
 
-   
-    spitStringToNubmerArray(numberArrayAsString: string){
-          return numberArrayAsString.split(',').map(function(item) {return parseInt(item, 10);})
+
+    spitStringToNubmerArray(numberArrayAsString: string) {
+        return numberArrayAsString.split(',').map(function (item) { return parseInt(item, 10); })
     }
 }
 
 export class SoftwareMarketplaceData extends BaseDataPanel {
-    interval: number;
+ constructor(props: {}) {
+        super(props);
+        this.state = { content: [], custom_scope: 'slm.swmarket'};
+    }
 
     async setContent() {
-        const rows = await rpc.get_table_rows({
-            json: true, code: 'slm.swmarket', scope: 'slm.swmarket', table: 'slmswmarket', limit: 1000,
+        let result = await rpc.get_table_rows({
+            json: true, code: 'slm.swmarket', scope: this.state.custom_scope, table: 'slmswmarket', limit: 1000,
         });
-        let content =
-            'id                Provider                      Name                          Version            Status           Info                Part Of           Depends On             IPFS Hash\n' +
-            '\n';
-        for (let row of rows.rows)
-            content +=
-                (row.id + '').padEnd(16) +
-                (row.provider).padEnd(20) + '  ' +
-                (row.name).padEnd(39) + '  ' +
-                (row.version).padEnd(17) + '  ' +
-                (row.status).padEnd(11) + '  ' +
-                (row.info).padEnd(22) + '  ' +
-                (row.partof + '').padEnd(18) +
-                (row.dependencies + '').padEnd(20) +
-                (row.ipfs_hash + '') + '\n';
-        this.setState({ content });
+
+        this.setState({ content: result.rows });
     }
+
+    renderTableData() {
+        return this.state.content.map((row: any, index: number) => {
+            const { id, provider, productName, version, status, info, partof, dependencies, ipfs_hash } = row
+            return (
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{provider}</td>
+                    <td>{productName}</td>
+                    <td>{version}</td>
+                    <td>{status}</td>
+                    <td>{info}</td>
+                    <td>{partof}</td>
+                    <td>{dependencies}</td>
+                    <td>{ipfs_hash}</td>
+                </tr>
+            )
+        })
+    }
+
+    render() {
+        const custom_scope = this.state.custom_scope;
+        return <div>
+                 {custom_scope != 'slm.swmarket' && <table>
+                <tbody>
+                    <tr>
+                        <td>Account</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={custom_scope}
+                            onChange={e => this.setState({ custom_scope: e.target.value })}
+                        /></td>
+                    </tr>
+                </tbody>
+            </table>}
+                <br />
+            <table id="contents" >
+                {custom_scope == 'slm.swmarket' && <caption><h4>Marketplace Data</h4></caption>}
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Provider</th>
+                        <th>Component Name</th>
+                        <th>Version</th>
+                        <th>Status</th>
+                        <th>Info</th>
+                        <th>Part of</th>
+                        <th>Dependencies</th>
+                        <th>IPFS Location</th>
+                    </tr>
+                    {this.renderTableData()}
+                </tbody>
+            </table>
+        </div >
+    }
+
+}
+
+export class PrivateSoftwareMarketplaceData extends SoftwareMarketplaceData {
+    interval: number;
+
+    constructor(props: {}) {
+        super(props);
+        this.state = { content: [], custom_scope: 'slm.consult' };
+    }
+
 }
