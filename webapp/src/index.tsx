@@ -4,6 +4,8 @@ import { PostFormSecureNotification, SecureNotificationData, PrivateSecureNotifi
 import { PostFormUserManagement, UsersList } from "./userManagementDapp";
 import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDapp";
 import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData, PrivateSoftwareMarketplaceData } from "./softwareMarketplaceDapp";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+
 
 interface MainWindowState {
     showUserManagementDapp: boolean,
@@ -49,7 +51,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
     render() {
         const { showUserManagementDapp, showUsageTrackingDapp, showSoftwareMarketplaceDapp, showSecureNotificationsDapp } = this.state;
         return <div>
-            <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Admin Dapps</h1>
+            <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Admin Dapps..</h1>
             <br />
             <ul>
                 <li><a className={this.state.showSecureNotificationsDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSecureNotificationsDapp")}>Secure Notifications</a></li>
@@ -105,10 +107,10 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                         <PostFormSoftwareMarketPlace />
                         <br />
                         <SoftwareMarketplaceData />
-                            <br />
+                        <br />
                            Released only for:
         <PrivateSoftwareMarketplaceData />
-                    
+
                     </tr>
                 </tbody>
             </table>}
@@ -119,6 +121,24 @@ class MainWindow extends React.Component<{}, MainWindowState> {
 
 ReactDOM.render(
 
-    <div> <MainWindow /> </div>,
+    // <div> <MainWindow /> </div>,
+    <BrowserRouter>
+        <div>
+            <h2>Welcome to React Router Tutorial</h2>
+
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <ul className="navbar-nav mr-auto">
+                    <li><Link to={'/'} className="nav-link"> Home </Link></li>
+                    <li><Link to={'/tst'} className="nav-link">Contact</Link></li>
+                </ul>
+            </nav>
+            <hr />
+            <Switch>
+               <Route exact path='/' component={MainWindow} />
+               <Route  exact path='/tst'  component={PostFormSecureNotification} />
+            </Switch>
+        </div>
+
+    </BrowserRouter>,
     document.getElementById("RootMainWindow")
 );
