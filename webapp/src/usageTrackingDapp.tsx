@@ -2,7 +2,6 @@ import * as React from "react";
 import { BaseDappPostForm, rpc } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
-
 interface PostDataUsageTracking {
     id?: number;
     customer?: string;
@@ -132,7 +131,7 @@ export class UsageTrackingData extends BaseDataPanel {
     }
 
     renderTableData() {
-        return this.state.content.map((row: any, index: number) => {
+        return this.state.content.map((row: any) => {
             const { id, customer, provider, component, version, sysid, sysinfo, ipfs_hash } = row
             return (
                 <tr key={id}>
@@ -143,7 +142,7 @@ export class UsageTrackingData extends BaseDataPanel {
                     <td>{version}</td>
                     <td>{sysid}</td>
                     <td>{sysinfo}</td>
-                    <td>{ipfs_hash}</td>
+                    <td>{this.renderIpfsStringList(ipfs_hash)}</td>
                 </tr>
             )
         })

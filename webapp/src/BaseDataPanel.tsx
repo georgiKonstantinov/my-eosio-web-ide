@@ -1,5 +1,4 @@
 import * as React from "react";
-import { rpc } from "./baseDappPostForm";
 
 export class BaseDataPanel extends React.Component<{}, { content: [], custom_scope: string }> {
     interval: number;
@@ -23,8 +22,20 @@ export class BaseDataPanel extends React.Component<{}, { content: [], custom_sco
         clearInterval(this.interval);
     }
 
-    render() {
-        return <code><pre>{this.state.content}</pre></code>
-
+    renderStrinList(arrayToParse: string[]) {
+        return arrayToParse.map((arrayElement: string) => {
+            return (arrayElement + ' ');
+        });
     }
+
+    renderIpfsStringList(arrayToParse: string[]) {
+        return arrayToParse.map((arrayElement: string) => {
+            return ( 
+            <div>
+                <a href={`https://ipfs.io/ipfs/${arrayElement}`}>Download</a> &nbsp;
+            </div>
+            )
+        });
+    }
+
 }

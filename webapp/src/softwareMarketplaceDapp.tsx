@@ -5,7 +5,8 @@ import { BaseDataPanel } from "./BaseDataPanel";
 interface PostDataSoftwareMarketplace {
     id?: number;
     provider?: string;
-    name?: string;
+    productName?: string;
+    releasedFor?: string;
     version?: string;
     status?: string;
     info?: string;
@@ -23,7 +24,8 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
             data: {
                 id: 0,
                 provider: "",
-                name: "",
+                productName: "",
+                releasedFor: "",
                 version: "",
                 status: "",
                 info: "",
@@ -59,11 +61,19 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                                     /></td>
                                 </tr>
                                 <tr>
-                                    <td>Name</td>
+                                    <td>Product Name</td>
                                     <td><input
                                         style={{ width: 500 }}
-                                        value={this.state.data.name}
-                                        onChange={e => this.setData({ name: e.target.value })}
+                                        value={this.state.data.productName}
+                                        onChange={e => this.setData({ productName: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
+                                    <td>Released for</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.data.releasedFor}
+                                        onChange={e => this.setData({ releasedFor: e.target.value })}
                                     /></td>
                                 </tr>
                                 <tr>
@@ -134,9 +144,9 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
 }
 
 export class SoftwareMarketplaceData extends BaseDataPanel {
- constructor(props: {}) {
+    constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.swmarket'};
+        this.state = { content: [], custom_scope: 'slm.swmarket' };
     }
 
     async setContent() {
@@ -148,7 +158,7 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
     }
 
     renderTableData() {
-        return this.state.content.map((row: any, index: number) => {
+        return this.state.content.map((row: any) => {
             const { id, provider, productName, version, status, info, partof, dependencies, ipfs_hash } = row
             return (
                 <tr key={id}>
@@ -158,18 +168,20 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
                     <td>{version}</td>
                     <td>{status}</td>
                     <td>{info}</td>
-                    <td>{partof}</td>
-                    <td>{dependencies}</td>
-                    <td>{ipfs_hash}</td>
+                    <td>{this.renderStrinList(partof)}</td>
+                    <td>{this.renderStrinList(dependencies)}</td>
+                    <td>{this.renderIpfsStringList(ipfs_hash)}</td>
                 </tr>
             )
         })
     }
 
+
+
     render() {
         const custom_scope = this.state.custom_scope;
         return <div>
-                 {custom_scope != 'slm.swmarket' && <table>
+            {custom_scope != 'slm.swmarket' && <table>
                 <tbody>
                     <tr>
                         <td>Account</td>
@@ -181,7 +193,7 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
                     </tr>
                 </tbody>
             </table>}
-                <br />
+            <br />
             <table id="contents" >
                 {custom_scope == 'slm.swmarket' && <caption><h4>Marketplace Data</h4></caption>}
                 <tbody>

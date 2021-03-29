@@ -2,7 +2,6 @@ import * as React from "react";
 import { BaseDappPostForm, rpc } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
-
 interface PostDataSecureNotification {
     id?: number;
     sender?: string;
@@ -10,7 +9,6 @@ interface PostDataSecureNotification {
     message?: string;
     component?: number;
 };
-
 
 export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureNotification> {
     constructor(props: {}) {
@@ -112,7 +110,7 @@ export class SecureNotificationData extends BaseDataPanel {
     }
 
     renderTableData() {
-        return this.state.content.map((row: any, index: number) => {
+        return this.state.content.map((row: any) => {
             const { id, sender, message, component } = row //destructuring
             return (
                 <tr key={id}>

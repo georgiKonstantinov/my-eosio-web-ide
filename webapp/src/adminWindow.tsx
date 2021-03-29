@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { PostFormSecureNotification, SecureNotificationData, PrivateSecureNotificationData } from "./secureNotificationDapp";
 import { PostFormUserManagement, UsersList } from "./userManagementDapp";
 import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDapp";
@@ -49,7 +48,7 @@ export class AdminWindow extends React.Component<{}, AdminWindowState> {
     render() {
         const { showUserManagementDapp, showUsageTrackingDapp, showSoftwareMarketplaceDapp, showSecureNotificationsDapp } = this.state;
         return <div>
-            <h1 style={{ 'color': "#5DADE2" }}>Software Lifecycle Manager Admin Dapps</h1>
+            <h1 style={{ 'color': "#5DADE2" , textAlign: "center"}}>Software Lifecycle Manager Admin Dapps</h1>
             <br />
             <ul>
                 <li><a className={this.state.showSecureNotificationsDapp ? "clicked" : "notClicked"} onClick={() => this.showComponent("showSecureNotificationsDapp")}>Secure Notifications</a></li>

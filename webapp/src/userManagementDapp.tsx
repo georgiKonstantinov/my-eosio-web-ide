@@ -2,8 +2,6 @@ import * as React from "react";
 import { BaseDappPostForm, rpc } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
-
-
 interface PostDataUserManagement {
     id?: number;
     account?: string;
@@ -14,8 +12,6 @@ interface PostDataUserManagement {
     isauditor?: boolean;
     is3pvendor?: boolean;
 };
-
-
 
 export class PostFormUserManagement extends BaseDappPostForm<PostDataUserManagement> {
     constructor(props: {}) {
@@ -134,7 +130,7 @@ export class UsersList extends BaseDataPanel {
     }
 
     renderTableData() {
-        return this.state.content.map((row: any, index: number) => {
+        return this.state.content.map((row: any) => {
             const { id, account, name, isprovider, iscustomer, isconsult, isauditor, is3pvendor } = row
             return (
                 <tr key={id}>
@@ -175,7 +171,7 @@ export class UsersList extends BaseDataPanel {
     render() {
         return <div>
             <table id="contents" >
-                <caption><h4>User List</h4></caption>
+                <caption><h4>Registered Users List</h4></caption>
                 <tbody>
                     <tr>
                         <th>ID</th>
