@@ -41,13 +41,44 @@ li a {
   text-decoration: none;
 }
 
+
+li.small {
+  float: right;
+}
+
+li a.smallClicked {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 2px 10px;
+   text-decoration: none;
+   background-color: gray;
+}
+
+li a.smallNotClicked {
+   display: block;
+   color: white;
+   text-align: center;
+   padding: 2px 10px;
+   text-decoration: none;
+   background-color: var(--black-color);
+}
+
+li a.smallClicked:hover {
+    background-color: gray;
+}
+
+li a.smallNotClicked:hover {
+    background-color: gray;
+}
+
 li a:hover {
   background-color: var(--main-orange-color);
 }
 
+
 .clicked{
   background-color: var(--main-orange-color);
-;
 }
 
 .notClicked{

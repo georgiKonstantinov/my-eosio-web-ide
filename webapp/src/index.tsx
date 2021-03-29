@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {AdminWindow} from "./adminWindow";
-import {UserWindow} from "./userWindow"
+import { AdminWindow } from "./adminWindow";
+import { UserWindow } from "./userWindow"
 
 interface MainWindowState {
     showAdminWindow: boolean,
@@ -38,7 +38,7 @@ class MainWindow extends React.Component<{}, MainWindowState> {
         const { showAdminWindow, showUserWindow } = this.state;
         return <div>
             {showUserWindow && <table>
-                 <tbody>
+                <tbody>
                     <tr>
                         <UserWindow />
                     </tr>
@@ -46,19 +46,18 @@ class MainWindow extends React.Component<{}, MainWindowState> {
                 </tbody>
             </table>}
 
-              {showAdminWindow && <table>
-                 <tbody>
+            {showAdminWindow && <table>
+                <tbody>
                     <tr>
                         <AdminWindow />
                     </tr>
 
                 </tbody>
             </table>}
-
-             <ul>
-                <li><a className={this.state.showUserWindow ? "clicked" : "notClicked"} onClick={() => this.showComponent("showUserWindow")}>User View</a></li>
-                <li><a className={this.state.showAdminWindow ? "clicked" : "notClicked"} onClick={() => this.showComponent("showAdminWindow")}>Admin View</a></li>
-
+            < br />
+            <ul>
+                <li className="small"><a className={this.state.showAdminWindow ? "smallClicked" : "smallNotClicked"} onClick={() => this.showComponent("showAdminWindow")}>Admin View</a></li>
+                <li className="small"><a className={this.state.showUserWindow ? "smallClicked" : "smallNotClicked"} onClick={() => this.showComponent("showUserWindow")}>User View</a></li>
             </ul>
         </div>;
     }
