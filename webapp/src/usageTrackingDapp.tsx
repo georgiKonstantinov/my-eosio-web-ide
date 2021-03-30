@@ -65,7 +65,7 @@ export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTrackin
                                     /></td>
                                 </tr>
                                 <tr>
-                                    <td>Component Id</td>
+                                    <td>Component ID</td>
                                     <td><input
                                         style={{ width: 500 }}
                                         value={this.state.data.component}
@@ -106,7 +106,7 @@ export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTrackin
                             </tbody>
                         </table>
                         <br />
-                        <button onClick={e => this.post(this.state.data.customer, 'slm.tracking')}>Submit Tracking Data</button>
+                        <button onClick={e => this.post(this.state.data.customer, 'slm.tracking')}>Submit Usage Data</button>
                         <br /><br />
                         {this.state.error && <div>
                             <br />
