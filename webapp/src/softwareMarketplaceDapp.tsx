@@ -217,7 +217,6 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
 }
 
 export class PrivateSoftwareMarketplaceData extends SoftwareMarketplaceData {
-    interval: number;
 
     constructor(props: {}) {
         super(props);
