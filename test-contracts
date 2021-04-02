@@ -1,5 +1,12 @@
 ./init
 
+echo creating accounts for users
+cleos create account eosio slm.provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.customer EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.consult EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.auditor EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.3pvendor EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+
 echo generating sample users data
 cleos push action slm.users post '[1001, slm.provider, "Provider Inc.",  1, 0, 0, 0, 0]' -p slm.provider
 cleos push action slm.users post '[1002, slm.customer, "Customer Inc.",  0, 1, 0, 0, 0]' -p slm.customer

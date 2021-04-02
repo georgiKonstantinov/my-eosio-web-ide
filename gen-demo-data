@@ -1,0 +1,36 @@
+./init
+
+echo creating eos accounts for users
+cleos create account eosio slm.provider EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+cleos create account eosio slm.health EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
+
+echo generating sample users data
+cleos push action slm.users post '[100000001, slm.provider, "Software Provider",  1, 0, 0, 0, 0]' -p slm.provider
+cleos push action slm.users post '[100000002, slm.health, "MedicalHealth Inc.",  0, 1, 0, 0, 0]' -p slm.health
+
+echo printing users table
+cleos get table slm.users slm.users slmusers
+
+echo generating marketplace data
+cleos push action slm.swmarket post '[200000001, slm.provider, "", "Digital Health Manufacturing",  "1.0.0", "released", "Core functionality for Digital Health Manufacturing", [], [], ['ipfs_hash1']]' -p slm.provider
+cleos push action slm.swmarket post '[200000002, slm.provider, "", "Digital Health Manufacturing UI",  "1.0.0", "released", "UI functionality for Digital Health Manufacturing", [], [200000001], ['ipfs_hash1']]' -p slm.provider
+
+echo printing marketplace table
+cleos get table slm.swmarket slm.swmarket slmswmarket
+
+
+echo generating usage tracking data
+cleos push action slm.tracking post '[300000001, slm.health, slm.provider, 200000001,  "1.0.0", "HealthSystemID", "Core component installation successull.", []]' -p slm.health
+cleos push action slm.tracking post '[300000002, slm.health, slm.provider, 200000002,  "1.0.0", "HealthSystemID", "UI installation successull.", []]' -p slm.health
+
+
+echo printing usage tracking table
+cleos get table slm.tracking slm.tracking slmtracking
+
+
+echo generating notifications data
+cleos push action slm.notify post '[40000001, slm.provider, "",  "Digital Health Manufacturing released with version 1.0.0", 200000001]' -p slm.provider
+cleos push action slm.notify post '[40000002, slm.provider, "",  "Digital Health Manufacturing UI released with version 1.0.0", 200000002]' -p slm.provider
+
+echo printing notifications table
+cleos get table slm.notify slm.notify slmsecnotify
