@@ -1,5 +1,5 @@
-# This reposiotry contains source code of EOS Software Lyfecycle Manager and development environment based on EOSIO Web IDE. 
-Below you can find instructions to run your own copy of the environment
+# This reposiotry contains source code of EOS Software Lyfecycle Manager and development environment based on EOSIO Web IDE
+Below you can find instructions to run your own copy of the environment.
 
 # EOSIO Quickstart Web IDE for decentralized applications ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
 
