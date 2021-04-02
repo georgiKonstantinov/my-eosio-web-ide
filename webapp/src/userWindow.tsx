@@ -9,6 +9,7 @@ interface UserWindowState {
     showReleaseSoftwareDapp: boolean,
     showNotifyCustomersDapp: boolean,
     showNotificationsForProviderDapp: boolean,
+    showUsageForProviderDapp: boolean,
     showMyNotificationsDapp: boolean,
     showPublicNotificationsDapp: boolean,
     showSubmitSystemInfoDapp: boolean,
@@ -26,6 +27,7 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
             showReleaseSoftwareDapp: false,
             showNotifyCustomersDapp: false,
             showNotificationsForProviderDapp: true,
+            showUsageForProviderDapp: false,
             showMyNotificationsDapp: false,
             showPublicNotificationsDapp: false,
             showSubmitSystemInfoDapp: false,
@@ -35,7 +37,7 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
     }
 
     showComponent(name = "") {
-        this.setState({ showSoftwareProvidertDapp: false, showCustomerDapp: false, showReleaseSoftwareDapp: false, showNotifyCustomersDapp: false, showNotificationsForProviderDapp: false, showMyNotificationsDapp: false, showPublicNotificationsDapp: false, showSubmitSystemInfoDapp: false, showDownloadSoftwareDapp: false });
+        this.setState({ showSoftwareProvidertDapp: false, showCustomerDapp: false, showReleaseSoftwareDapp: false, showNotifyCustomersDapp: false, showNotificationsForProviderDapp: false, showUsageForProviderDapp: false, showMyNotificationsDapp: false, showPublicNotificationsDapp: false, showSubmitSystemInfoDapp: false, showDownloadSoftwareDapp: false });
         switch (name) {
             case "showSoftwareProvidertDapp":
                 this.setState({ showSoftwareProvidertDapp: true, showReleaseSoftwareDapp: true });
@@ -51,6 +53,9 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
                 break;
             case "showNotificationsForProviderDapp":
                 this.setState({ showSoftwareProvidertDapp: true, showNotificationsForProviderDapp: true });
+                break;
+            case "showUsageForProviderDapp":
+                this.setState({ showSoftwareProvidertDapp: true, showUsageForProviderDapp: true });
                 break;
             case "showMyNotificationsDapp":
                 this.setState({ showCustomerDapp: true, showMyNotificationsDapp: true });
@@ -71,7 +76,7 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
     }
 
     render() {
-        const { showSoftwareProvidertDapp, showCustomerDapp, showReleaseSoftwareDapp, showNotifyCustomersDapp, showNotificationsForProviderDapp, showMyNotificationsDapp, showPublicNotificationsDapp, showSubmitSystemInfoDapp, showDownloadSoftwareDapp } = this.state;
+        const { showSoftwareProvidertDapp, showCustomerDapp, showReleaseSoftwareDapp, showNotifyCustomersDapp, showNotificationsForProviderDapp, showUsageForProviderDapp, showMyNotificationsDapp, showPublicNotificationsDapp, showSubmitSystemInfoDapp, showDownloadSoftwareDapp } = this.state;
         return <div>
             <h1 style={{ 'color': "#5DADE2", textAlign: "center" }}>Software Lifecycle Manager Security Patch Dapps</h1>
             <br />
@@ -89,9 +94,25 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
                     <ul>
                         <li><a className={this.state.showNotificationsForProviderDapp ? "middleClicked" : "middleNotClicked"} onClick={() => this.showComponent("showNotificationsForProviderDapp")}>My Nofications</a></li>
                         <li><a className={this.state.showNotifyCustomersDapp ? "middleClicked" : "middleNotClicked"} onClick={() => this.showComponent("showNotifyCustomersDapp")}>Notify Customers</a></li>
+                        <li><a className={this.state.showUsageForProviderDapp ? "middleClicked" : "middleNotClicked"} onClick={() => this.showComponent("showUsageForProviderDapp")}>Check Usage</a></li>
                         <li><a className={this.state.showReleaseSoftwareDapp ? "middleClicked" : "middleNotClicked"} onClick={() => this.showComponent("showReleaseSoftwareDapp")}>Release Software</a></li>
                     </ul>
 
+                    {showNotifyCustomersDapp && <tr>
+                        <PostFormSecureNotification />
+                        <br />
+                        <SecureNotificationData />
+                    </tr>}
+                    {showNotificationsForProviderDapp && <tr>
+                        <br />
+                        <PrivateSecureNotificationForProviderData />
+                    </tr>}
+
+
+                    {showUsageForProviderDapp &&
+                        <tr>
+                            <UsageTrackingData />
+                        </tr>}
 
                     {showReleaseSoftwareDapp && <tr>
                         <PostFormSoftwareMarketPlace />
@@ -103,15 +124,6 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
                     </tr>
                     }
 
-                    {showNotifyCustomersDapp && <tr>
-                        <PostFormSecureNotification />
-                        <br />
-                        <SecureNotificationData />
-                    </tr>}
-                    {showNotificationsForProviderDapp && <tr>
-                        <br />
-                        <PrivateSecureNotificationData />
-                    </tr>}
                 </tbody>
             </table>}
 
@@ -153,5 +165,14 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
                 </tbody>
             </table>}
         </div>;
+    }
+
+}
+
+class PrivateSecureNotificationForProviderData extends SecureNotificationData {
+
+    constructor(props: {}) {
+        super(props);
+        this.state = { content: [], custom_scope: 'slm.provider' };
     }
 }

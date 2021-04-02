@@ -159,9 +159,9 @@ export class UsageTrackingData extends BaseDataPanel {
                         <th>Customer</th>
                         <th>Provider</th>
                         <th>Component ID</th>
-                        <th>version</th>
-                        <th>sysid</th>
-                        <th>sysinfo</th>
+                        <th>Version</th>
+                        <th>System ID</th>
+                        <th>System Info</th>
                         <th>IPFS Location</th>
                     </tr>
                     {this.renderTableData()}

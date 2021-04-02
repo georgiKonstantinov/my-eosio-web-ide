@@ -221,7 +221,7 @@ export class PrivateSoftwareMarketplaceData extends SoftwareMarketplaceData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.consult' };
+        this.state = { content: [], custom_scope: 'slm.health' };
     }
 
 }

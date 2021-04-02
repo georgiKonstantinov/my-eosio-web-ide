@@ -94,7 +94,6 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
 }
 
 export class SecureNotificationData extends BaseDataPanel {
-    interval: number;
 
     constructor(props: {}) {
         super(props);
@@ -159,11 +158,10 @@ export class SecureNotificationData extends BaseDataPanel {
 }
 
 export class PrivateSecureNotificationData extends SecureNotificationData {
-    interval: number;
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.customer' };
+        this.state = { content: [], custom_scope: 'slm.health' };
     }
 
 }

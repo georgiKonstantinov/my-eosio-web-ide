@@ -12,8 +12,8 @@ echo printing users table
 cleos get table slm.users slm.users slmusers
 
 echo generating marketplace data
-cleos push action slm.swmarket post '[200000001, slm.provider, "", "Digital Health Manufacturing",  "1.0.0", "released", "Core functionality for Digital Health Manufacturing", [], [], ['ipfs_hash1']]' -p slm.provider
-cleos push action slm.swmarket post '[200000002, slm.provider, "", "Digital Health Manufacturing UI",  "1.0.0", "released", "UI functionality for Digital Health Manufacturing", [], [200000001], ['ipfs_hash1']]' -p slm.provider
+cleos push action slm.swmarket post '[200000001, slm.provider, "", "Digital Health Manufacturing",  "1.0.0", "released", "Core functionality for Digital Health Manufacturing", [], [], ['QmfP4gvNar1u1fEs8eK1f1wxTnYF24rysbQsu16AvhWCFb']]' -p slm.provider
+cleos push action slm.swmarket post '[200000002, slm.provider, "", "Digital Health Manufacturing UI",  "1.0.0", "released", "UI functionality for Digital Health Manufacturing", [], [200000001], ['QmfP4gvNar1u1fEs8eK1f1wxTnYF24rysbQsu16AvhWCFb']]' -p slm.provider
 
 echo printing marketplace table
 cleos get table slm.swmarket slm.swmarket slmswmarket
