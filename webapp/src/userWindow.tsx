@@ -40,7 +40,7 @@ export class UserWindow extends React.Component<{}, UserWindowState> {
         this.setState({ showSoftwareProvidertDapp: false, showCustomerDapp: false, showReleaseSoftwareDapp: false, showNotifyCustomersDapp: false, showNotificationsForProviderDapp: false, showUsageForProviderDapp: false, showMyNotificationsDapp: false, showPublicNotificationsDapp: false, showSubmitSystemInfoDapp: false, showDownloadSoftwareDapp: false });
         switch (name) {
             case "showSoftwareProvidertDapp":
-                this.setState({ showSoftwareProvidertDapp: true, showReleaseSoftwareDapp: true });
+                this.setState({ showSoftwareProvidertDapp: true, showNotificationsForProviderDapp: true });
                 break;
             case "showCustomerDapp":
                 this.setState({ showCustomerDapp: true, showMyNotificationsDapp: true });
