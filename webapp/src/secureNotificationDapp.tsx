@@ -3,7 +3,7 @@ import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./ba
 import { BaseDataPanel } from "./BaseDataPanel";
 import { encrypt, decrypt } from 'eos-encrypt';
 
-const defautlScope = 'slm.notify';
+const defaultScope = 'slm.notify';
 
 interface PostDataSecureNotification {
     id?: number;
@@ -90,7 +90,7 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
                             </tbody>
                         </table>
                         <br />
-                        <button onClick={e => this.post(this.state.data.sender, defautlScope)}>Notify</button>
+                        <button onClick={e => this.post(this.state.data.sender, defaultScope)}>Notify</button>
                         <br />    <br />
 
                         {this.state.error && <div>
@@ -119,12 +119,12 @@ export class SecureNotificationData extends BaseDataPanel {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], customScope: defautlScope, privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
+        this.state = { content: [], customScope: defaultScope, privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {
         let result = await rpc.get_table_rows({
-            json: true, code: defautlScope, scope: this.state.customScope, table: 'slmsecnotify', limit: 1000,
+            json: true, code: defaultScope, scope: this.state.customScope, table: 'slmsecnotify', limit: 1000,
         });
 
         this.setState({ content: result.rows });
@@ -145,7 +145,7 @@ export class SecureNotificationData extends BaseDataPanel {
     }
 
     decryptMessage(message: string): string {
-        if (this.state.customScope === defautlScope) {
+        if (this.state.customScope === defaultScope) {
             return message;
         }
 
@@ -165,7 +165,7 @@ export class SecureNotificationData extends BaseDataPanel {
         const customScope = this.state.customScope;
         return <div>
 
-            {customScope != defautlScope && <table>
+            {customScope != defaultScope && <table>
                 <tbody>
                     <tr>
                         <td>Account</td>
@@ -196,7 +196,7 @@ export class SecureNotificationData extends BaseDataPanel {
             <br />
 
             <table id="contents" >
-                {customScope == defautlScope && <caption><h4>Public Notifications</h4></caption>}
+                {customScope == defaultScope && <caption><h4>Public Notifications</h4></caption>}
                 <tbody>
                     <tr>
                         <th>ID</th>

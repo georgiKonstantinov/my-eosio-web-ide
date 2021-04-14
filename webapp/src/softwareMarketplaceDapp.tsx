@@ -1,6 +1,10 @@
 import * as React from "react";
 import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
+import { encrypt, decrypt } from 'eos-encrypt';
+
+
+const defaultScope = 'slm.swmarket';
 
 interface PostDataSoftwareMarketplace {
     id?: number;
@@ -78,6 +82,14 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                                     /></td>
                                 </tr>
                                 <tr>
+                                    <td>Reciever Public Key</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.publicKey}
+                                        onChange={e => this.setState({ publicKey: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
                                     <td>Version</td>
                                     <td><input
                                         style={{ width: 500 }}
@@ -125,7 +137,7 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
                             </tbody>
                         </table>
                         <br />
-                        <button onClick={e => this.post(this.state.data.provider, 'slm.swmarket')}>Submit Software to Marketplace</button>
+                        <button onClick={e => this.post(this.state.data.provider, defaultScope)}>Submit Software to Marketplace</button>
                         <br /> <br />
                         {this.state.error && <div>
                             <br />
@@ -142,17 +154,26 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
     spitStringToNubmerArray(numberArrayAsString: string) {
         return numberArrayAsString.split(',').map(function (item) { return parseInt(item, 10); })
     }
+
+    encyptData() {
+        var ipfs_hashes = this.state.data.ipfs_hash;
+        if (this.state.data.releasedFor != '') {
+            for (var index in ipfs_hashes) {
+                this.state.data.ipfs_hash[index] = encrypt(this.state.privateKey, this.state.publicKey, ipfs_hashes[index]);
+            }
+        }
+    }
 }
 
 export class SoftwareMarketplaceData extends BaseDataPanel {
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], customScope: 'slm.swmarket', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
+        this.state = { content: [], customScope: defaultScope, privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {
         let result = await rpc.get_table_rows({
-            json: true, code: 'slm.swmarket', scope: this.state.customScope, table: 'slmswmarket', limit: 1000,
+            json: true, code: defaultScope, scope: this.state.customScope, table: 'slmswmarket', limit: 1000,
         });
 
         this.setState({ content: result.rows });
@@ -171,18 +192,44 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
                     <td>{info}</td>
                     <td>{this.renderStrinList(partof)}</td>
                     <td>{this.renderStrinList(dependencies)}</td>
-                    <td>{this.renderIpfsStringList(ipfs_hash)}</td>
+                    <td>{this.decryptIpfsHashes(ipfs_hash)}</td>
                 </tr>
             )
         })
     }
 
+    decryptIpfsHashes(ipfs_hashes: string[]) {
+        if (this.state.customScope === defaultScope) {
+            return this.renderIpfsStringList(ipfs_hashes);
+        }
+
+        if (this.state.privateKey && this.state.publicKey) {
+            return ipfs_hashes.map((arrayElement: string) => {
+                try {
+                    return (
+                        <div>
+                            <a href={`https://ipfs.io/ipfs/${decrypt(this.state.privateKey, this.state.publicKey, arrayElement)}`}>Download</a> &nbsp;
+                        </div>
+                    )
+                } catch (e) {
+                    console.log(e);
+                    return (
+                        <div>
+                            Decpryption failed:  {e.message} &nbsp;
+                        </div>
+                    )
+                }
+            });
+        }
+
+        return this.renderIpfsStringList(ipfs_hashes);
+    }
 
 
     render() {
         const custom_scope = this.state.customScope;
         return <div>
-            {custom_scope != 'slm.swmarket' && <table>
+            {custom_scope != defaultScope && <table>
                 <tbody>
                     <tr>
                         <td>Account</td>
@@ -192,11 +239,27 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
                             onChange={e => this.setState({ customScope: e.target.value })}
                         /></td>
                     </tr>
+                    <tr>
+                        <td>Private Key</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.privateKey}
+                            onChange={e => this.setState({ privateKey: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Sender Public Key</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.publicKey}
+                            onChange={e => this.setState({ publicKey: e.target.value })}
+                        /></td>
+                    </tr>
                 </tbody>
             </table>}
             <br />
             <table id="contents" >
-                {custom_scope == 'slm.swmarket' && <caption><h4>Marketplace Data</h4></caption>}
+                {custom_scope == defaultScope && <caption><h4>Marketplace Data</h4></caption>}
                 <tbody>
                     <tr>
                         <th>ID</th>
