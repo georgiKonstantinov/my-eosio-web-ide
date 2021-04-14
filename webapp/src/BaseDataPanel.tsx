@@ -1,11 +1,12 @@
 import * as React from "react";
+import { defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 
-export class BaseDataPanel extends React.Component<{}, { content: [], custom_scope: string }> {
+export class BaseDataPanel extends React.Component<{}, { content: [], customScope: string,  privateKey: string, publicKey: string }> {
     interval: number;
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: '' };
+        this.state = { content: [], customScope: '', privateKey:  defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {

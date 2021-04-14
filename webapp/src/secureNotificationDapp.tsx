@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BaseDappPostForm, rpc } from "./baseDappPostForm";
+import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
 interface PostDataSecureNotification {
@@ -14,7 +14,8 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
     constructor(props: {}) {
         super(props);
         this.state = {
-            privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
+            publicKey: defaultPublicKey,
+            privateKey: defaultPrivateKey,
             data: {
                 id: 0,
                 sender: '',
@@ -58,6 +59,14 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
                                     /></td>
                                 </tr>
                                 <tr>
+                                    <td>Reciever Public Key</td>
+                                    <td><input
+                                        style={{ width: 500 }}
+                                        value={this.state.publicKey}
+                                        onChange={e => this.setState({ publicKey: e.target.value })}
+                                    /></td>
+                                </tr>
+                                <tr>
                                     <td>Component ID</td>
                                     <td><input
                                         style={{ width: 500 }}
@@ -91,18 +100,22 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
             </table>
         </div>;
     }
+
+    encyptData() {
+        
+    }
 }
 
 export class SecureNotificationData extends BaseDataPanel {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.notify' };
+        this.state = { content: [], customScope: 'slm.notify', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {
         let result = await rpc.get_table_rows({
-            json: true, code: 'slm.notify', scope: this.state.custom_scope, table: 'slmsecnotify', limit: 1000,
+            json: true, code: 'slm.notify', scope: this.state.customScope, table: 'slmsecnotify', limit: 1000,
         });
 
         this.setState({ content: result.rows });
@@ -123,9 +136,9 @@ export class SecureNotificationData extends BaseDataPanel {
     }
 
     render() {
-        const  custom_scope  = this.state.custom_scope;
+        const custom_scope = this.state.customScope;
         return <div>
-            
+
             {custom_scope != 'slm.notify' && <table>
                 <tbody>
                     <tr>
@@ -133,16 +146,32 @@ export class SecureNotificationData extends BaseDataPanel {
                         <td><input
                             style={{ width: 500 }}
                             value={custom_scope}
-                            onChange={e => this.setState({ custom_scope: e.target.value })}
+                            onChange={e => this.setState({ customScope: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Private Key</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.privateKey}
+                            onChange={e => this.setState({ privateKey: e.target.value })}
+                        /></td>
+                    </tr>
+                    <tr>
+                        <td>Sender Public Key</td>
+                        <td><input
+                            style={{ width: 500 }}
+                            value={this.state.publicKey}
+                            onChange={e => this.setState({ publicKey: e.target.value })}
                         /></td>
                     </tr>
                 </tbody>
             </table>}
-                <br />
+            <br />
 
-            <table id="contents" >  
-             {custom_scope == 'slm.notify' &&   <caption><h4>Public Notifications</h4></caption>}
-                                     <tbody>
+            <table id="contents" >
+                {custom_scope == 'slm.notify' && <caption><h4>Public Notifications</h4></caption>}
+                <tbody>
                     <tr>
                         <th>ID</th>
                         <th>Sender</th>
@@ -161,7 +190,7 @@ export class PrivateSecureNotificationData extends SecureNotificationData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.health' };
+        this.state = { content: [], customScope: 'slm.health', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
 }

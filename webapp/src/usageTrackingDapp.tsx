@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BaseDappPostForm, rpc } from "./baseDappPostForm";
+import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
 interface PostDataUsageTracking {
@@ -18,7 +18,8 @@ export class PostFormUsageTracking extends BaseDappPostForm<PostDataUsageTrackin
     constructor(props: {}) {
         super(props);
         this.state = {
-            privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
+            privateKey: defaultPrivateKey,
+            publicKey: defaultPublicKey,
             data: {
                 id: 0,
                 customer: '',
@@ -149,7 +150,6 @@ export class UsageTrackingData extends BaseDataPanel {
     }
 
     render() {
-        const custom_scope = this.state.custom_scope;
         return <div>
             <table id="contents" >
                 <caption><h4>Usage Tracking Data</h4></caption>

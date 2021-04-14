@@ -4,9 +4,12 @@ import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
 
 export const rpc = new JsonRpc(''); // nodeos and web server are on same port
 
+export const defaultPublicKey = 'EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV';
+export const defaultPrivateKey = '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3';
 
 interface PostFormBaseState<Data> {
     privateKey: string;
+    publicKey?: string;
     data?: Data;
     error: string;
 };
@@ -24,7 +27,12 @@ export class BaseDappPostForm<Data> extends React.Component<{}, PostFormBaseStat
         this.setState({ data: { ...this.state.data, ...data } });
     }
 
+    encyptData(){
+
+    }
+
     async post(actor:string, account: string) {
+        this.encyptData(); 
         try {
             this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
             const result = await this.api.transact(

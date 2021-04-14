@@ -2,6 +2,7 @@ import * as React from "react";
 import { PostFormSecureNotification, SecureNotificationData, PrivateSecureNotificationData } from "./secureNotificationDapp";
 import { PostFormSoftwareMarketPlace, SoftwareMarketplaceData, PrivateSoftwareMarketplaceData } from "./softwareMarketplaceDapp";
 import { PostFormUsageTracking, UsageTrackingData } from "./usageTrackingDapp";
+import { defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 
 interface UserWindowState {
     showSoftwareProvidertDapp: boolean,
@@ -173,6 +174,6 @@ class PrivateSecureNotificationForProviderData extends SecureNotificationData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.provider' };
+        this.state = { content: [], customScope: 'slm.provider', privateKey:  defaultPrivateKey, publicKey: defaultPublicKey };
     }
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BaseDappPostForm, rpc } from "./baseDappPostForm";
+import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
 
 interface PostDataSoftwareMarketplace {
@@ -20,7 +20,8 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
     constructor(props: {}) {
         super(props);
         this.state = {
-            privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
+            privateKey: defaultPrivateKey,
+            publicKey: defaultPublicKey,
             data: {
                 id: 0,
                 provider: "",
@@ -146,12 +147,12 @@ export class PostFormSoftwareMarketPlace extends BaseDappPostForm<PostDataSoftwa
 export class SoftwareMarketplaceData extends BaseDataPanel {
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.swmarket' };
+        this.state = { content: [], customScope: 'slm.swmarket', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {
         let result = await rpc.get_table_rows({
-            json: true, code: 'slm.swmarket', scope: this.state.custom_scope, table: 'slmswmarket', limit: 1000,
+            json: true, code: 'slm.swmarket', scope: this.state.customScope, table: 'slmswmarket', limit: 1000,
         });
 
         this.setState({ content: result.rows });
@@ -179,7 +180,7 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
 
 
     render() {
-        const custom_scope = this.state.custom_scope;
+        const custom_scope = this.state.customScope;
         return <div>
             {custom_scope != 'slm.swmarket' && <table>
                 <tbody>
@@ -188,7 +189,7 @@ export class SoftwareMarketplaceData extends BaseDataPanel {
                         <td><input
                             style={{ width: 500 }}
                             value={custom_scope}
-                            onChange={e => this.setState({ custom_scope: e.target.value })}
+                            onChange={e => this.setState({ customScope: e.target.value })}
                         /></td>
                     </tr>
                 </tbody>
@@ -220,7 +221,7 @@ export class PrivateSoftwareMarketplaceData extends SoftwareMarketplaceData {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], custom_scope: 'slm.health' };
+        this.state = { content: [], customScope: 'slm.health', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
 }
