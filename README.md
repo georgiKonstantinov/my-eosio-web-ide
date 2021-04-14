@@ -35,6 +35,7 @@ The source code for the smart contracts is at `contract` folder within the IDE. 
 ```
 
 This will produce `*.abi` and `*.wasm` and will use cleos to deploy them in the blockchain
+In addition this script installs eos-encrypt library.
 
 
 ## Creating users and genarationg sample data using the smart contracts

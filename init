@@ -1,3 +1,6 @@
+echo install eos-encrypt
+npm install --save eos-encrypt
+
 echo creating accounts for smart contracts
 cleos create account eosio slm.users EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
 cleos create account eosio slm.notify EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV
