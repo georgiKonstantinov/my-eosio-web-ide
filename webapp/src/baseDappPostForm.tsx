@@ -20,20 +20,21 @@ export class BaseDappPostForm<Data> extends React.Component<{}, PostFormBaseStat
     constructor(props: {}) {
         super(props);
         this.api = new Api({ rpc, signatureProvider: new JsSignatureProvider([]) });
-    
+         this.state = {
+            publicKey: defaultPublicKey,
+            privateKey: defaultPrivateKey,
+            error: '',
+        };
+
     }
 
     setData<Type>(data: Type) {
         this.setState({ data: { ...this.state.data, ...data } });
     }
 
-    encyptData(){
-
-    }
-
-    async post(actor:string, account: string) {
-        this.encyptData(); 
+    async post(actor: string, account: string) {
         try {
+            this.encyptData();
             this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
             const result = await this.api.transact(
                 {
@@ -52,11 +53,20 @@ export class BaseDappPostForm<Data> extends React.Component<{}, PostFormBaseStat
             });
             console.log(result);
             this.setState({ error: '' });
+            this.clearEncryptedDataFromUI();
         } catch (e) {
             if (e.json)
                 this.setState({ error: JSON.stringify(e.json, null, 4) });
             else
                 this.setState({ error: '' + e });
         }
+    }
+
+    encyptData() {
+
+    }
+
+    clearEncryptedDataFromUI() {
+    
     }
 }

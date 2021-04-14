@@ -1,6 +1,9 @@
 import * as React from "react";
 import { BaseDappPostForm, rpc, defaultPrivateKey, defaultPublicKey } from "./baseDappPostForm";
 import { BaseDataPanel } from "./BaseDataPanel";
+import { encrypt, decrypt } from 'eos-encrypt';
+
+const defautlScope = 'slm.notify';
 
 interface PostDataSecureNotification {
     id?: number;
@@ -87,7 +90,7 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
                             </tbody>
                         </table>
                         <br />
-                        <button onClick={e => this.post(this.state.data.sender, 'slm.notify')}>Notify</button>
+                        <button onClick={e => this.post(this.state.data.sender, defautlScope)}>Notify</button>
                         <br />    <br />
 
                         {this.state.error && <div>
@@ -102,7 +105,13 @@ export class PostFormSecureNotification extends BaseDappPostForm<PostDataSecureN
     }
 
     encyptData() {
-        
+        if (this.state.data.receiver != '') {
+            this.state.data.message = encrypt(this.state.privateKey, this.state.publicKey, this.state.data.message);
+        }
+    }
+
+    clearEncryptedDataFromUI() {
+        this.setData({ message: ''});
     }
 }
 
@@ -110,12 +119,12 @@ export class SecureNotificationData extends BaseDataPanel {
 
     constructor(props: {}) {
         super(props);
-        this.state = { content: [], customScope: 'slm.notify', privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
+        this.state = { content: [], customScope: defautlScope, privateKey: defaultPrivateKey, publicKey: defaultPublicKey };
     }
 
     async setContent() {
         let result = await rpc.get_table_rows({
-            json: true, code: 'slm.notify', scope: this.state.customScope, table: 'slmsecnotify', limit: 1000,
+            json: true, code: defautlScope, scope: this.state.customScope, table: 'slmsecnotify', limit: 1000,
         });
 
         this.setState({ content: result.rows });
@@ -123,29 +132,46 @@ export class SecureNotificationData extends BaseDataPanel {
 
     renderTableData() {
         return this.state.content.map((row: any) => {
-            const { id, sender, message, component } = row //destructuring
+            const { id, sender, message, component } = row
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{sender}</td>
                     <td>{component}</td>
-                    <td>{message}</td>
+                    <td>{this.decryptMessage(message)}</td>
                 </tr>
             )
         })
     }
 
+    decryptMessage(message: string): string {
+        if (this.state.customScope === defautlScope) {
+            return message;
+        }
+
+        if (this.state.privateKey && this.state.publicKey) {
+            try {
+                return decrypt(this.state.privateKey, this.state.publicKey, message);
+            } catch (e) {
+                console.log(e);
+                return "Decpryption failed: " + e.message;
+            }
+        }
+
+        return message;
+    }
+
     render() {
-        const custom_scope = this.state.customScope;
+        const customScope = this.state.customScope;
         return <div>
 
-            {custom_scope != 'slm.notify' && <table>
+            {customScope != defautlScope && <table>
                 <tbody>
                     <tr>
                         <td>Account</td>
                         <td><input
                             style={{ width: 500 }}
-                            value={custom_scope}
+                            value={customScope}
                             onChange={e => this.setState({ customScope: e.target.value })}
                         /></td>
                     </tr>
@@ -170,7 +196,7 @@ export class SecureNotificationData extends BaseDataPanel {
             <br />
 
             <table id="contents" >
-                {custom_scope == 'slm.notify' && <caption><h4>Public Notifications</h4></caption>}
+                {customScope == defautlScope && <caption><h4>Public Notifications</h4></caption>}
                 <tbody>
                     <tr>
                         <th>ID</th>
